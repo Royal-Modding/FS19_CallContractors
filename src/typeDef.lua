@@ -1,0 +1,7 @@
+---@class JobType
+---@field id number
+---@field contractClass Contract
+---@field name string
+---@field title string
+---@field requireFieldParam bool
+---@field requireFruitParam bool

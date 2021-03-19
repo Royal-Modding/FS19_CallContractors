@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<GUI onOpen="onOpen" onClose="onClose" onCreate="onCreate">
+    <GuiElement type="empty" profile="newLayer" />
+    <GuiElement type="bitmap" profile="dialogFullscreenBg" />
+
+    <GuiElement type="bitmap" profile="ccContainer">
+        <GuiElement type="bitmap" profile="dialogHeaderDocked">
+            <GuiElement type="text" profile="dialogHeaderText" text="$l10n_gui_cc_container_title" />
+        </GuiElement>
+
+        <GuiElement type="multiTextOption" profile="jobTypeSelector" onClick="onJobTypeSelectionChange" onCreate="onCreateElement" id="jobTypeSelector">
+            <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
+            <GuiElement type="button" profile="multiTextOptionSettingsRight" />
+            <GuiElement type="text" profile="multiTextOptionSettingsText" />
+            <GuiElement type="text" profile="multiTextOptionSettingsTitle" text="$l10n_gui_cc_job_type_selector_title" />
+            <GuiElement type="bitmap" profile="jobTypeSelectorBg" />
+        </GuiElement>
+
+        <GuiElement type="multiTextOption" profile="fieldSelector" onClick="onFieldSelectionChange" onCreate="onCreateElement" id="fieldSelector">
+            <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
+            <GuiElement type="button" profile="multiTextOptionSettingsRight" />
+            <GuiElement type="text" profile="multiTextOptionSettingsText" />
+            <GuiElement type="text" profile="multiTextOptionSettingsTitle" text="$l10n_gui_cc_field_selector_title" />
+            <GuiElement type="bitmap" profile="fieldSelectorBg" />
+        </GuiElement>
+
+        <GuiElement type="multiTextOption" profile="fruitSelector" onClick="onfruitSelectionChange" onCreate="onCreateElement" id="fruitSelector">
+            <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
+            <GuiElement type="button" profile="multiTextOptionSettingsRight" />
+            <GuiElement type="text" profile="multiTextOptionSettingsText" />
+            <GuiElement type="text" profile="multiTextOptionSettingsTitle" text="$l10n_gui_cc_fruit_selector_title" />
+            <GuiElement type="bitmap" profile="fruitSelectorBg" />
+        </GuiElement>
+
+        <GuiElement type="empty" profile="ccListBox">
+            <GuiElement type="list" profile="ccList" position="1px -1px" onSelectionChanged="onListSelectionChanged" onDoubleClick="onDoubleClick" id="ccList">
+                <GuiElement type="listItem" profile="ccListItem" id="listItemTemplate">
+                    <GuiElement type="text" profile="ccItemText" text="Route 10" name="listItemText" />
+                    <GuiElement type="text" profile="ccItemDate" text="2020/02/27 18:13:44" name="listItemDate" />
+                </GuiElement>
+            </GuiElement>
+
+            <GuiElement type="bitmap" profile="verticalGlassListSliderBackground" size="28px 598px" position="-1px -1px">
+                <GuiElement type="slider" profile="verticalGlassListSlider" size="16px 586px" dataElementId="ccList" handleFocus="false" />
+            </GuiElement>
+        </GuiElement>
+
+        <GuiElement type="flowLayout" profile="buttonBoxDocked">
+            <GuiElement type="button" profile="buttonBack" text="$l10n_button_back" onClick="onClickBack" />
+            <GuiElement type="button" profile="buttonOK" text="$l10n_gui_ad_button_export" onClick="onClickOk" />
+            <GuiElement type="button" profile="buttonCancel" text="$l10n_gui_ad_button_import" onClick="onClickCancel" />
+            <GuiElement type="button" profile="buttonActivate" text="$l10n_button_delete" onClick="onClickActivate" />
+        </GuiElement>
+    </GuiElement>
+</GUI>

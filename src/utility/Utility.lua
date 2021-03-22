@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 1.9.2.0
+---@version 2.0.0.0
 ---@date 09/11/2020
 
 --- Utilities class

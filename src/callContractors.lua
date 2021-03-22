@@ -38,23 +38,6 @@ function CallContractors:initialize()
     self.gui = g_gui:loadGui(self.guiDirectory .. "ccGui.xml", "CallContractorsGui", CCGui:new())
 end
 
-function CallContractors:onValidateVehicleTypes(vehicleTypeManager, addSpecialization, addSpecializationBySpecialization, addSpecializationByVehicleType, addSpecializationByFunction)
-    ---@param specName string name of the spec to add
-    ---addSpecialization("specName")
-    _ = {}
-    ---@param specName string name of the spec to add
-    ---@param requiredSpecName string name of the required spec
-    ---addSpecializationBySpecialization("specName", "requiredSpecName")
-    _ = {}
-    ---@param specName string name of the spec to add
-    ---@param requiredVehicleTypeName string name of the required vehicle type
-    ---addSpecializationByVehicleType("specName", "requiredVehicleTypeName")
-    _ = {}
-    ---@param specName string name of the spec to add
-    ---@param function function if return true spec will be added to the current vehicle type
-    ---addSpecializationByFunction("specName", function(vehicleType) return false end)
-end
-
 function CallContractors:onMissionInitialize(baseDirectory, missionCollaborators)
 end
 
@@ -95,7 +78,6 @@ function CallContractors:onStartMission()
 end
 
 function CallContractors:onMissionStarted()
-    --DebugUtil.printTableRecursively(FarmlandManager)
 end
 
 function CallContractors:onWriteStream(streamId)
@@ -143,21 +125,6 @@ end
 
 function CallContractors:openGui()
     if not self.gui.isOpen then
-        --local ownedFields = self:getOwnedFields()
-        --if #ownedFields > 0 then
-        --    self.gui.target:setOwnedFields(ownedFields)
-        --end
         g_gui:showGui(self.gui.name)
     end
-end
-
-function CallContractors:getOwnedFields()
-    local fields = {}
-    local playerFarm = g_currentMission.player.farmId
-    for _, field in pairs(g_fieldManager:getFields()) do
-        if g_farmlandManager:getFarmlandOwner(field.farmland.id) == playerFarm then
-            table.insert(fields, field)
-        end
-    end
-    return fields
 end

@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 1.9.2.0
+---@version 2.0.0.0
 ---@date 21/11/2020
 
 --- Initialize RoyalUtility
@@ -15,6 +15,8 @@ function InitRoyalUtility(utilityDirectory)
     source(Utils.getFilename("Table.lua", utilityDirectory))
     source(Utils.getFilename("Interpolator.lua", utilityDirectory))
     source(Utils.getFilename("Array.lua", utilityDirectory))
+    source(Utils.getFilename("FadeEffect.lua", utilityDirectory))
+    source(Utils.getFilename("DelayedCallBack.lua", utilityDirectory))
     g_logManager:devInfo("Royal Utility loaded successfully by " .. g_currentModName)
     return true
 end

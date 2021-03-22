@@ -47,11 +47,4 @@ function PlowingContract:randomizeData(field, fruit)
     self.price = pricePerHa * field.fieldArea * priceMultiplier
 
     self.npc = g_npcManager:getRandomNPC()
-
-    --print(string.format("%d = %.2f (%.2f) (%.2f)", self.waitTime, waitTimeNormalized, basePriceMultiplier, priceMultiplier))
-    --print(string.format("%.1f + %.1f", self.basePrice, self.price))
-    --if not printOne then
-    --    DebugUtil.printTableRecursively(self.npc, nil, nil, 2)
-    --    printOne = true
-    --end
 end

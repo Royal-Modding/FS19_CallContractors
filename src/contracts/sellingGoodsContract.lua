@@ -11,8 +11,8 @@ SellingGoodsContract_mt = Class(SellingGoodsContract, Contract)
 --- SellingGoodsContract class
 ---@param mt? table custom meta table
 ---@return SellingGoodsContract
-function SellingGoodsContract:new(mt)
+function SellingGoodsContract.new(mt)
     ---@type SellingGoodsContract
-    local c = Contract:new(mt or SellingGoodsContract_mt)
-    return c
+    local self = Contract.new(mt or SellingGoodsContract_mt)
+    return self
 end

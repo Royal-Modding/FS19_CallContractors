@@ -63,58 +63,83 @@
     </Traits>
 
     <Profile name="ccContainer" extends="yesNoDialogBg">
-        <Value name="size" value="978px 780px" />
-        <Value name="position" value="0px -150px" />
+        <Value name="size" value="803px 761px" />
+        <Value name="position" value="0px -158px" />
         <Value name="screenAlign" value="topCenter" />
         <Value name="positionOrigin" value="topCenter" />
     </Profile>
 
     <Profile name="jobTypeSelector" extends="multiTextOptionSettings">
-        <Value name="size" value="266px 48px" />
-        <Value name="position" value="45px -45px" />
+        <Value name="size" value="221px 48px" />
+        <Value name="position" value="40px -40px" />
         <Value name="screenAlign" value="topLeft" />
         <Value name="positionOrigin" value="topLeft" />
     </Profile>
 
     <Profile name="jobTypeSelectorBg" extends="multiTextOptionSettingsBg">
-        <Value name="size" value="170px 48px" />
+        <Value name="size" value="125px 48px" />
     </Profile>
 
     <Profile name="fieldSelector" extends="multiTextOptionSettings">
-        <Value name="size" value="216px 48px" />
-        <Value name="position" value="356px -45px" />
+        <Value name="size" value="161px 48px" />
+        <Value name="position" value="301px -40px" />
         <Value name="screenAlign" value="topLeft" />
         <Value name="positionOrigin" value="topLeft" />
     </Profile>
 
     <Profile name="fieldSelectorBg" extends="multiTextOptionSettingsBg">
-        <Value name="size" value="120px 48px" />
+        <Value name="size" value="65px 48px" />
     </Profile>
 
     <Profile name="fruitSelector" extends="multiTextOptionSettings">
-        <Value name="position" value="617px -45px" />
+        <Value name="size" value="261px 48px" />
+        <Value name="position" value="502px -40px" />
         <Value name="screenAlign" value="topLeft" />
         <Value name="positionOrigin" value="topLeft" />
     </Profile>
 
-    <Profile name="fruitSelectorBg" extends="multiTextOptionSettingsBg"></Profile>
+    <Profile name="fruitSelectorBg" extends="multiTextOptionSettingsBg">
+        <Value name="size" value="165px 48px" />
+    </Profile>
 
     <Profile name="ccListBox" extends="emptyPanel" with="lightFrame">
-        <Value name="size" value="888px 600px" />
-        <Value name="position" value="0px -125px" />
+        <Value name="size" value="723px 602px" />
+        <Value name="position" value="0px -115px" />
         <Value name="screenAlign" value="topCenter" />
         <Value name="positionOrigin" value="topCenter" />
     </Profile>
 
+    <Profile name="ccContractsEmptyBox" with="anchorMiddleCenter">
+        <Value name="position" value="0px 50px" />
+        <Value name="size" value="650px 120px" />
+    </Profile>
+
+    <Profile name="ccSliderBackground" extends="horizontalGlassListSliderBackground">
+        <Value name="positionOrigin" value="topRight" />
+        <Value name="screenAlign" value="topRight" />
+        <Value name="size" value="26px 600px" /> <!-- container height - frame -->
+        <Value name="position" value="-1px -1px" />
+    </Profile>
+
+    <Profile name="ccListSlider" extends="horizontalGlassListSlider">
+        <Value name="screenAlign" value="topRight" />
+        <Value name="positionOrigin" value="topRight" />
+        <Value name="direction" value="y" />
+        <Value name="position" value="-5px -5px" />
+        <Value name="sliderSize" value="16px 100px" />
+        <Value name="handleFocus" value="false" />
+        <Value name="size" value="16px 590px" />
+    </Profile>
+
     <Profile name="ccList" extends="list">
-        <Value name="size" value="860px 600px" />
+        <Value name="size" value="695px 600px" />
         <Value name="selectOnScroll" value="true" />
         <Value name="screenAlign" value="topLeft" />
         <Value name="positionOrigin" value="topLeft" />
         <Value name="isHorizontalList" value="false" />
-        <Value name="itemsPerCol" value="13" />
-        <Value name="listItemHeight" value="46px" />
-        <Value name="listItemWidth" value="690px" />
+        <Value name="itemsPerCol" value="6" />
+        <Value name="listItemHeight" value="100px" />
+        <Value name="listItemWidth" value="695px" />
         <Value name="rowBackgroundProfile" value="ccListItem" />
         <Value name="rowBackgroundProfileAlternate" value="ccListItemAlternate" />
     </Profile>
@@ -123,30 +148,89 @@
         <Value name="imageColor" value="$preset_colorListRowBackground" />
         <Value name="imageFocusedColor" value="$preset_colorMainUI" />
         <Value name="imageSelectedColor" value="$preset_colorMainUI" />
-        <Value name="size" value="858px 46px" />
+        <Value name="size" value="695px 100px" />
         <Value name="position" value="0px 0px" />
     </Profile>
 
     <Profile name="ccListItemAlternate" extends="ccListItem" with="alternateRow" /> <!--anchorMiddleLeft-->
 
-    <!--<Profile name="ccItemText" extends="textDefault">
-        <Value name="size" value="610px 46px" />
-        <Value name="textMaxWidth" value="360px" />
-        <Value name="textVerticalAlignment" value="middle" />
-        <Value name="textSize" value="16px" />
-        <Value name="textBold" value="true" />
-        <Value name="textOffset" value="40px 2px" />
-        <Value name="textFocusedOffset" value="40px 2px" />
+    <Profile name="ccFarmerCircle" extends="baseReference" with="anchorTopLeft">
+        <Value name="size" value="90px 90px" />
+        <Value name="position" value="10px -5px" />
+
+        <Value name="imageColor" value="$preset_colorBlack" />
+        <Value name="imageUVs" value="6px 390px 270px 270px" />
     </Profile>
 
-    <Profile name="ccItemDate" extends="textDefault">
-        <Value name="size" value="610px 46px" />
-        <Value name="textMaxWidth" value="360px" />
-        <Value name="textVerticalAlignment" value="middle" />
-        <Value name="textSize" value="14px" />
+    <Profile name="ccFarmerImage" extends="baseReference" with="anchorMiddleCenter">
+        <Value name="size" value="90px 90px" />
+        <Value name="position" value="0px 0px" />
+
+        <Value name="imageUVs" value="0 0 1 1" />
+        <Value name="imageFilename" value="dataS2/character/humans/npc/npc01_diffuse.png" />
+    </Profile>
+
+    <Profile name="ccFarmerName" extends="textDefault" with="anchorTopLeft">
+        <Value name="textSize" value="19px" />
+        <Value name="textBold" value="true" />
+        <Value name="size" value="300px 20px" />
+        <Value name="textAlignment" value="left" />
+        <Value name="position" value="125px -18px" />
+    </Profile>
+
+    <Profile name="ccJobTime" extends="textDefault" with="anchorTopLeft">
+        <Value name="textSize" value="15px" />
         <Value name="textBold" value="false" />
-        <Value name="textOffset" value="40px 2px" />
-        <Value name="textFocusedOffset" value="40px 2px" />
+        <Value name="size" value="300px 20px" />
+        <Value name="textAlignment" value="left" />
+        <Value name="position" value="125px -60px" />
+    </Profile>
+
+    <Profile name="ccCFeeText" extends="ccJobTime" with="anchorTopLeft">
+        <Value name="textSize" value="14px" />
+        <Value name="textBold" value="true" />
+        <Value name="size" value="193px 20px" />
+        <Value name="textAlignment" value="left" />
+        <Value name="position" value="425px -11px" />
+    </Profile>
+
+    <Profile name="ccJFeeText" extends="ccJobTime" with="anchorTopLeft">
+        <Value name="textSize" value="14px" />
+        <Value name="textBold" value="true" />
+        <Value name="size" value="193px 20px" />
+        <Value name="textAlignment" value="left" />
+        <Value name="position" value="425px -37px" />
+    </Profile>
+
+    <Profile name="ccTFeeText" extends="ccJobTime" with="anchorTopLeft">
+        <Value name="textSize" value="14px" />
+        <Value name="textBold" value="true" />
+        <Value name="size" value="193px 20px" />
+        <Value name="textAlignment" value="left" />
+        <Value name="position" value="425px -63px" />
+    </Profile>
+
+    <Profile name="ccCFee" extends="ccJobTime" with="anchorTopRight">
+        <!--<Value name="textColor" value="$preset_colorRed" />-->
+        <Value name="textSize" value="14px" />
+        <Value name="size" value="65px 20px" />
         <Value name="textAlignment" value="right" />
-    </Profile>-->
+        <Value name="position" value="-12px -11px" />
+    </Profile>
+
+    <Profile name="ccJFee" extends="ccJobTime" with="anchorTopRight">
+        <!--<Value name="textColor" value="$preset_colorRed" />-->
+        <Value name="textSize" value="14px" />
+        <Value name="size" value="65px 20px" />
+        <Value name="textAlignment" value="right" />
+        <Value name="position" value="-12px -37px" />
+    </Profile>
+
+    <Profile name="ccTFee" extends="ccJobTime" with="anchorTopRight">
+        <!--<Value name="textColor" value="$preset_colorRed" />-->
+        <Value name="textSize" value="14px" />
+        <Value name="size" value="65px 20px" />
+        <Value name="textAlignment" value="right" />
+        <Value name="position" value="-12px -63px" />
+    </Profile>
 </GUIProfiles>

@@ -11,8 +11,8 @@ CultivatingContract_mt = Class(CultivatingContract, Contract)
 --- CultivatingContract class
 ---@param mt? table custom meta table
 ---@return CultivatingContract
-function CultivatingContract:new(mt)
+function CultivatingContract.new(mt)
     ---@type CultivatingContract
-    local c = Contract:new(mt or CultivatingContract_mt)
-    return c
+    local self = Contract.new(mt or CultivatingContract_mt)
+    return self
 end

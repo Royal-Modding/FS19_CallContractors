@@ -12,24 +12,32 @@
 ---@field fieldSelector any
 ---@field jobTypeSelector any
 ---@field fruitSelector any
+---@field noContractsBox any
 CCGui = {}
-CCGui.CONTROLS = {"listItemTemplate", "ccList", "fieldSelector", "jobTypeSelector", "fruitSelector"}
+CCGui.CONTROLS = {"listItemTemplate", "ccList", "fieldSelector", "jobTypeSelector", "fruitSelector", "noContractsBox"}
 
 local CCGui_mt = Class(CCGui, ScreenElement)
 
----comment
 ---@param target any
 ---@return CCGui
 function CCGui:new(target)
     ---@type CCGui
     local o = ScreenElement:new(target, CCGui_mt)
     o.returnScreenName = ""
+
     o.fields = {}
-    o.fieldsMap = {}
+    o.fieldsMapping = {}
+    o.selectedField = nil
+
     o.fruits = {}
-    o.fruitsMap = {}
+    o.fruitsMapping = {}
+    o.selectedFruit = nil
+
     ---@type JobType
-    o.currentJobType = nil
+    o.selectedJobType = nil
+
+    o.contracts = {}
+
     o:registerControls(CCGui.CONTROLS)
     return o
 end
@@ -74,16 +82,21 @@ function CCGui:onOpen()
     self:onJobTypeSelectionChanged()
 end
 
-function CCGui:refreshItems()
-    --self.routes = ADRoutesManager:getRoutes(AutoDrive.loadedMap)
-    --self.ccList:deleteListItems()
-    --for _, r in pairs(self.routes) do
-    --    local new = self.listItemTemplate:clone(self.ccList)
-    --    new:setVisible(true)
-    --    new.elements[1]:setText(r.name)
-    --    new.elements[2]:setText(r.date)
-    --    new:updateAbsolutePosition()
-    --end
+function CCGui:refreshList()
+    self.contracts = CallContractors.contractsManager:getContracts(self.selectedJobType, self.selectedField, self.selectedFruit)
+    self.noContractsBox:setVisible(#self.contracts <= 0)
+    self.ccList:deleteListItems()
+    for _, c in pairs(self.contracts) do
+        local new = self.listItemTemplate:clone(self.ccList)
+        new:setVisible(true)
+        new.elements[1].elements[1]:setImageFilename(c.npc.imageFilename)
+        new.elements[2]:setText(c.npc.title)
+        new.elements[3]:setText(string.format(g_i18n:getText("gui_cc_job_time_text"), c.waitTime))
+        new.elements[4]:setText(g_i18n:formatMoney(c.basePrice))
+        new.elements[5]:setText(g_i18n:formatMoney(c.price))
+        new.elements[6]:setText(g_i18n:formatMoney(c.basePrice + c.price))
+        new:updateAbsolutePosition()
+    end
 end
 
 function CCGui:onListSelectionChanged(rowIndex)
@@ -157,28 +170,30 @@ end
 ---@param filter function
 function CCGui:updateFieldSelectorTexts(fields, filter)
     local texts = {}
-    self.fieldsMap = {}
+    self.fieldsMapping = {}
     for key, field in pairs(fields) do
         if filter(field) then
             table.insert(texts, field.fieldId)
-            table.insert(self.fieldsMap, key)
+            table.insert(self.fieldsMapping, field)
         end
     end
     self.fieldSelector:setTexts(texts)
+    self.selectedField = self.fieldsMapping[self.fieldSelector:getState()]
 end
 
 ---@param fruits table
 ---@param filter function
 function CCGui:updateFruitsSelectorTexts(fruits, filter)
     local texts = {}
-    self.fruitsMap = {}
+    self.fruitsMapping = {}
     for key, fruit in pairs(fruits) do
         if filter(fruit) then
             table.insert(texts, fruit.fillType.title)
-            table.insert(self.fruitsMap, key)
+            table.insert(self.fruitsMapping, fruit)
         end
     end
     self.fruitSelector:setTexts(texts)
+    self.selectedFruit = self.fruitsMapping[self.fruitSelector:getState()]
 end
 
 ---@param state number
@@ -188,21 +203,31 @@ function CCGui:onJobTypeSelectionChange(state, element)
 end
 
 function CCGui:onJobTypeSelectionChanged()
-    self.currentJobType = CallContractors.JOB_TYPES[self.jobTypeSelector:getState()]
+    self.selectedJobType = CallContractors.JOB_TYPES[self.jobTypeSelector:getState()]
 
-    self.fieldSelector:setDisabled(not self.currentJobType.requireFieldParam)
-    if self.currentJobType.requireFieldParam then
-        self:updateFieldSelectorTexts(self.fields, self.currentJobType.contractClass.fieldsFilter)
+    self.fieldSelector:setDisabled(not self.selectedJobType.requireFieldParam)
+    if self.selectedJobType.requireFieldParam then
+        self:updateFieldSelectorTexts(self.fields, self.selectedJobType.contractClass.fieldsFilter)
     end
 
-    self.fruitSelector:setDisabled(not self.currentJobType.requireFruitParam)
-    if self.currentJobType.requireFruitParam then
-        self:updateFruitsSelectorTexts(self.fruits, self.currentJobType.contractClass.fruitsFilter)
+    self.fruitSelector:setDisabled(not self.selectedJobType.requireFruitParam)
+    if self.selectedJobType.requireFruitParam then
+        self:updateFruitsSelectorTexts(self.fruits, self.selectedJobType.contractClass.fruitsFilter)
     end
+
+    self:refreshList()
 end
 
 ---@param state number
 ---@param element any
 function CCGui:onFieldSelectionChange(state, element)
-    print("Field: " .. tostring(state))
+    self.selectedField = self.fieldsMapping[state]
+    self:refreshList()
+end
+
+---@param state number
+---@param element any
+function CCGui:onFruitSelectionChange(state, element)
+    self.selectedFruit = self.fruitsMapping[state]
+    self:refreshList()
 end

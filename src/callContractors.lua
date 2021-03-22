@@ -29,7 +29,9 @@ function CallContractors:initialize()
     self.JOB_TYPES[1] = {id = 1, contractClass = CultivatingContract, name = "cultivating", title = g_i18n:getText("cc_job_type_cultivating"), requireFieldParam = true, requireFruitParam = false}
     self.JOB_TYPES[2] = {id = 2, contractClass = PlowingContract, name = "plowing", title = g_i18n:getText("cc_job_type_plowing"), requireFieldParam = true, requireFruitParam = false}
     self.JOB_TYPES[3] = {id = 3, contractClass = SowingContract, name = "sowing", title = g_i18n:getText("cc_job_type_sowing"), requireFieldParam = true, requireFruitParam = true}
-    self.JOB_TYPES[4] = {id = 4, contractClass = PlowingContract, name = "sellingGoods", title = g_i18n:getText("cc_job_type_selling_goods"), requireFieldParam = false, requireFruitParam = true}
+    self.JOB_TYPES[4] = {id = 4, contractClass = SellingGoodsContract, name = "sellingGoods", title = g_i18n:getText("cc_job_type_selling_goods"), requireFieldParam = false, requireFruitParam = true}
+
+    self.contractsManager = ContractsManager:load(self.JOB_TYPES)
 
     g_gui:loadProfiles(self.guiDirectory .. "guiProfiles.xml")
 

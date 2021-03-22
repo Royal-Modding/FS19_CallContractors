@@ -11,8 +11,47 @@ PlowingContract_mt = Class(PlowingContract, Contract)
 --- PlowingContract class
 ---@param mt? table custom meta table
 ---@return PlowingContract
-function PlowingContract:new(mt)
+function PlowingContract.new(mt)
     ---@type PlowingContract
-    local c = Contract:new(mt or PlowingContract_mt)
-    return c
+    local self = Contract.new(mt or PlowingContract_mt)
+    return self
+end
+
+---@param field any
+---@param fruit any
+---@return boolean
+function PlowingContract.canBePerformed(field, fruit)
+    return true
+end
+
+---@param field any
+---@param fruit any
+function PlowingContract:randomizeData(field, fruit)
+    local economicDifficulty = g_currentMission.missionInfo.economicDifficulty
+
+    local minWaitTime = 2
+    local maxWaitTime = 48
+
+    local minWaitTimePriceMultiplier = 3
+    local maxWaitTimePriceMultiplier = 1
+
+    local callPrice = 75 * economicDifficulty
+    local pricePerHa = 125 * economicDifficulty
+
+    self.waitTime = math.random(minWaitTime, maxWaitTime)
+
+    local basePriceMultiplier = MathUtil.lerp(minWaitTimePriceMultiplier, maxWaitTimePriceMultiplier, Utility.normalize(minWaitTime, self.waitTime, maxWaitTime))
+    local priceMultiplier = MathUtil.lerp(1, basePriceMultiplier, 0.1) -- priceMultiplier is 10% of basePriceMultiplier
+
+    self.basePrice = callPrice * basePriceMultiplier
+    self.price = pricePerHa * field.fieldArea * priceMultiplier
+
+    self.npc = g_npcManager:getRandomNPC()
+
+    --print(string.format("%d = %.2f (%.2f) (%.2f)", self.waitTime, waitTimeNormalized, basePriceMultiplier, priceMultiplier))
+    --print(string.format("%.1f + %.1f", self.basePrice, self.price))
+    --if not printOne then
+    --    DebugUtil.printTableRecursively(self.npc, nil, nil, 2)
+    --    printOne = true
+    --end
 end

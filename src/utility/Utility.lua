@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 1.9.1.0
+---@version 1.9.2.0
 ---@date 09/11/2020
 
 --- Utilities class
@@ -18,6 +18,18 @@ function Utility.clamp(minValue, value, maxValue)
     maxValue = maxValue or 1
     value = value or 0
     return math.max(minValue, math.min(maxValue, value))
+end
+
+--- Normalize value by given maximum and minimum
+---@param minValue number
+---@param value number
+---@param maxValue number
+---@return number
+function Utility.normalize(minValue, value, maxValue)
+    minValue = minValue or 0
+    maxValue = maxValue or 1
+    value = value or 0.5
+    return (value - minValue) / (maxValue - minValue)
 end
 
 ---@param target table

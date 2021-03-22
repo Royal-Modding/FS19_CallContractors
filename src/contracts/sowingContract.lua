@@ -11,12 +11,14 @@ SowingContract_mt = Class(SowingContract, Contract)
 --- SowingContract class
 ---@param mt? table custom meta table
 ---@return SowingContract
-function SowingContract:new(mt)
+function SowingContract.new(mt)
     ---@type SowingContract
-    local c = Contract:new(mt or SowingContract_mt)
-    return c
+    local self = Contract.new(mt or SowingContract_mt)
+    return self
 end
 
+---@param fruit any
+---@return boolean
 function SowingContract.fruitsFilter(fruit)
     return fruit.index ~= FruitType.WEED and fruit.index ~= FruitType.POPLAR and fruit.index ~= FruitType.DRYGRASS
 end

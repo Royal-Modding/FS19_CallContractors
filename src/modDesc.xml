@@ -29,6 +29,7 @@ Fr description
 		<sourceFile filename="rmod/Main.lua" />
 		<sourceFile filename="utility/Main.lua" />
 		<sourceFile filename="callContractors.lua" />
+		<sourceFile filename="contractsManager.lua" />
 		<sourceFile filename="playerExtension.lua" />
 		<sourceFile filename="gui/ccGui.lua" />
 	</extraSourceFiles>
@@ -70,6 +71,22 @@ Fr description
 		</text>
 		<text name="gui_cc_job_type_selector_title">
 			<en>Job</en>
+		</text>
+		<text name="gui_cc_job_time_text">
+			<en>Will do the job within %d hours</en>
+			<it>Effettuerà il lavoro in %d ore</it>
+		</text>
+		<text name="gui_cc_convening_fee_text">
+			<en>Convening fee:</en>
+			<it>Costo della chiamata:</it>
+		</text>
+		<text name="gui_cc_job_charge_text">
+			<en>Job charge:</en>
+			<it>Costo del lavoro:</it>
+		</text>
+		<text name="gui_cc_payment_amount_text">
+			<en>Payment amount:</en>
+			<it>Importo da pagare:</it>
 		</text>
 	</l10n>
 </modDesc> <!--

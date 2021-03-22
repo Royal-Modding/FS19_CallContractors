@@ -24,7 +24,7 @@
             <GuiElement type="bitmap" profile="fieldSelectorBg" />
         </GuiElement>
 
-        <GuiElement type="multiTextOption" profile="fruitSelector" onClick="onfruitSelectionChange" onCreate="onCreateElement" id="fruitSelector">
+        <GuiElement type="multiTextOption" profile="fruitSelector" onClick="onFruitSelectionChange" onCreate="onCreateElement" id="fruitSelector">
             <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
             <GuiElement type="button" profile="multiTextOptionSettingsRight" />
             <GuiElement type="text" profile="multiTextOptionSettingsText" />
@@ -35,13 +35,26 @@
         <GuiElement type="empty" profile="ccListBox">
             <GuiElement type="list" profile="ccList" position="1px -1px" onSelectionChanged="onListSelectionChanged" onDoubleClick="onDoubleClick" id="ccList">
                 <GuiElement type="listItem" profile="ccListItem" id="listItemTemplate">
-                    <GuiElement type="text" profile="ccItemText" text="Route 10" name="listItemText" />
-                    <GuiElement type="text" profile="ccItemDate" text="2020/02/27 18:13:44" name="listItemDate" />
+                    <GuiElement type="bitmap" profile="ccFarmerCircle">
+                        <GuiElement type="bitmap" profile="ccFarmerImage" />
+                    </GuiElement>
+                    <GuiElement type="text" profile="ccFarmerName" text="Benjarmin" />
+                    <GuiElement type="text" profile="ccJobTime" text="Will do the job within 10 hours" />
+                    <GuiElement type="text" profile="ccCFee" text="500€" />
+                    <GuiElement type="text" profile="ccJFee" text="800€" />
+                    <GuiElement type="text" profile="ccTFee" text="1300€" />
+                    <GuiElement type="text" profile="ccCFeeText" text="$l10n_gui_cc_convening_fee_text" />
+                    <GuiElement type="text" profile="ccJFeeText" text="$l10n_gui_cc_job_charge_text" />
+                    <GuiElement type="text" profile="ccTFeeText" text="$l10n_gui_cc_payment_amount_text" />
                 </GuiElement>
             </GuiElement>
 
-            <GuiElement type="bitmap" profile="verticalGlassListSliderBackground" size="28px 598px" position="-1px -1px">
-                <GuiElement type="slider" profile="verticalGlassListSlider" size="16px 586px" dataElementId="ccList" handleFocus="false" />
+            <GuiElement type="bitmap" profile="ccSliderBackground">
+                <GuiElement type="slider" profile="ccListSlider" dataElementId="ccList" />
+            </GuiElement>
+
+            <GuiElement type="bitmap" profile="ccContractsEmptyBox" id="noContractsBox">
+                <GuiElement type="text" profile="ingameMenuContractsEmptyText" text="$l10n_fieldJob_noJobAvailable" />
             </GuiElement>
         </GuiElement>
 

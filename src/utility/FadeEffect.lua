@@ -1,15 +1,18 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.0.0.0
+---@version 2.0.3.0
 ---@date 17/02/2017
 
+---@class FadeEffect
 FadeEffect = {}
+
 FadeEffect.STATES = {}
 FadeEffect.STATES.FADEIN = 1
 FadeEffect.STATES.STAY = 2
 FadeEffect.STATES.FADEOUT = 3
 FadeEffect.STATES.IDLE = 4
+
 FadeEffect.ALIGNS = {}
 FadeEffect.ALIGNS.LEFT = 0
 FadeEffect.ALIGNS.TOP = 0
@@ -17,45 +20,59 @@ FadeEffect.ALIGNS.CENTER = 1
 FadeEffect.ALIGNS.RIGHT = 2
 FadeEffect.ALIGNS.BOTTOM = 2
 
+---@class FadeEffectSettings
+FadeEffect.defaultSettings = {
+    color = {
+        r = 1,
+        g = 1,
+        b = 1
+    },
+    position = {
+        x = 0.5,
+        y = 0.5
+    },
+    align = {
+        x = FadeEffect.ALIGNS.CENTER,
+        y = FadeEffect.ALIGNS.CENTER
+    },
+    bold = true,
+    size = 0.025,
+    text = "Fade Effect",
+    shadow = false,
+    shadowPosition = {
+        x = 0,
+        y = 0
+    },
+    initialAlpha = 0,
+    statesTime = {1, 1, 1},
+    statesAlpha = {1, 1, 0},
+    loop = false
+}
+
+---@param settings FadeEffectSettings
+---@return FadeEffect
 function FadeEffect:new(settings)
     if FadeEffect_mt == nil then
         FadeEffect_mt = Class(FadeEffect)
     end
-    local fe = {}
-    setmetatable(fe, FadeEffect_mt)
-    local defaultSettings = {
-        color = {
-            r = 1,
-            g = 1,
-            b = 1
-        },
-        position = {
-            x = 0.5,
-            y = 0.5
-        },
-        align = {
-            x = FadeEffect.ALIGNS.CENTER,
-            y = FadeEffect.ALIGNS.CENTER
-        },
-        bold = true,
-        size = 0.025,
-        text = "Fade Effect",
-        shadow = false,
-        shadowPosition = {
-            x = 0,
-            y = 0
-        },
-        initialAlpha = 0,
-        statesTime = {1, 1, 1},
-        statesAlpha = {1, 1, 0},
-        loop = false
-    }
-    fe.settings = defaultSettings
+
+    ---@type FadeEffect
+    local fe = setmetatable({}, FadeEffect_mt)
+
+    ---@type FadeEffectSettings
+    fe.settings = {}
+
+    for k, v in pairs(self.defaultSettings) do
+        fe.settings[k] = v
+    end
+
     for k, v in pairs(settings) do
         fe.settings[k] = v
     end
+
     fe:play(fe.settings.text)
     fe.state = FadeEffect.STATES.IDLE
+
     return fe
 end
 
@@ -76,11 +93,13 @@ function FadeEffect:alignText()
     end
 end
 
+---@param text string
 function FadeEffect:setText(text)
     self.settings.text = text
     self:alignText()
 end
 
+---@param text string
 function FadeEffect:play(text)
     if text ~= nil then
         self.settings.text = text
@@ -110,6 +129,7 @@ function FadeEffect:draw()
     end
 end
 
+---@param dt number
 function FadeEffect:update(dt)
     if self.state ~= FadeEffect.STATES.IDLE then
         local stateTime = self.settings.statesTime[self.state] * 1000

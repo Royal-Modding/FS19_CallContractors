@@ -33,7 +33,7 @@
         </GuiElement>
 
         <GuiElement type="empty" profile="ccListBox">
-            <GuiElement type="list" profile="ccList" position="1px -1px" onSelectionChanged="onListSelectionChanged" onDoubleClick="onDoubleClick" id="ccList">
+            <GuiElement type="list" profile="ccList" position="1px -1px" onSelectionChanged="onListSelectionChanged" id="ccList">
                 <GuiElement type="listItem" profile="ccListItem" id="listItemTemplate">
                     <GuiElement type="bitmap" profile="ccFarmerCircle">
                         <GuiElement type="bitmap" profile="ccFarmerImage" />
@@ -56,13 +56,16 @@
             <GuiElement type="bitmap" profile="ccContractsEmptyBox" id="noContractsBox">
                 <GuiElement type="text" profile="ingameMenuContractsEmptyText" text="$l10n_fieldJob_noJobAvailable" />
             </GuiElement>
+
+            <GuiElement type="bitmap" profile="ccContractSigningImageBg" id="ccContractSigningImageBg">
+                <GuiElement type="bitmap" profile="ccContractSigningImage" id="ccContractSigningImage" />
+            </GuiElement>
         </GuiElement>
 
         <GuiElement type="flowLayout" profile="buttonBoxDocked">
             <GuiElement type="button" profile="buttonBack" text="$l10n_button_back" onClick="onClickBack" />
-            <GuiElement type="button" profile="buttonOK" text="$l10n_gui_ad_button_export" onClick="onClickOk" />
-            <GuiElement type="button" profile="buttonCancel" text="$l10n_gui_ad_button_import" onClick="onClickCancel" />
-            <GuiElement type="button" profile="buttonActivate" text="$l10n_button_delete" onClick="onClickActivate" />
+            <GuiElement type="button" profile="buttonActivate" text="$l10n_gui_cc_sign" onClick="onClickActivate" id="ccActivateButton" />
+            <GuiElement type="button" profile="buttonCancel" text="$l10n_button_cancel" onClick="onClickCancel" id="ccCancelButton" />
         </GuiElement>
     </GuiElement>
 </GUI>

@@ -1,56 +1,63 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.0.0.0
+---@version 2.0.3.0
 ---@date 08/03/17
 
+---@class DelayedCallBack
 DelayedCallBack = {}
 
-function DelayedCallBack:new(callBack, callBackSelf)
+---@param callback function
+---@param callbackObject any
+---@return DelayedCallBack
+function DelayedCallBack:new(callback, callbackObject)
     if DelayedCallBack_mt == nil then
         DelayedCallBack_mt = Class(DelayedCallBack)
     end
-    local dcb = {}
-    setmetatable(dcb, DelayedCallBack_mt)
-    dcb.callBack = callBack
-    dcb.callBackSelf = callBackSelf
-    dcb.callBackCalled = true
+
+    ---@type DelayedCallBack
+    local dcb = setmetatable({}, DelayedCallBack_mt)
+    dcb.callBack = callback
+    dcb.callbackObject = callbackObject
+    dcb.callbackCalled = true
     dcb.delay = 0
-    dcb.delayCounter = 0
+    dcb.timer = 0
     dcb.skipOneFrame = false
     return dcb
 end
 
+---@param dt number
 function DelayedCallBack:update(dt)
-    if not self.callBackCalled then
+    if not self.callbackCalled then
         if not self.skipOneFrame then
-            self.delayCounter = self.delayCounter + dt
+            self.timer = self.timer + dt
         end
-        if self.delayCounter >= self.delay then
+        if self.timer >= self.delay then
             self:callCallBack()
         end
         if self.skipOneFrame then
-            self.delayCounter = self.delayCounter + dt
+            self.timer = self.timer + dt
         end
     end
 end
 
+---@param delay number
 function DelayedCallBack:call(delay, ...)
-    self.callBackCalled = false
-    self.otherParams = {...}
+    self.callbackCalled = false
+    self.callbackParams = {...}
     if delay == nil or delay == 0 then
         self:callCallBack()
     else
         self.delay = delay
-        self.delayCounter = 0
+        self.timer = 0
     end
 end
 
 function DelayedCallBack:callCallBack()
-    if self.callBackSelf ~= nil then
-        self.callBack(self.callBackSelf, unpack(self.otherParams))
+    if self.callbackObject ~= nil then
+        self.callBack(self.callbackObject, unpack(self.callbackParams))
     else
-        self.callBack(unpack(self.otherParams))
+        self.callBack(unpack(self.callbackParams))
     end
-    self.callBackCalled = true
+    self.callbackCalled = true
 end

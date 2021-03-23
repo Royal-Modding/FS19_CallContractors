@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.0.0.0
+---@version 2.0.3.0
 ---@date 05/01/2021
 
 --- Table utilities class

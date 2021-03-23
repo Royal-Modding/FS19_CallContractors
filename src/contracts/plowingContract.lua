@@ -26,7 +26,8 @@ end
 
 ---@param field any
 ---@param fruit any
-function PlowingContract:randomizeData(field, fruit)
+---@param otherContractProposals Contract[]
+function PlowingContract:randomizeData(field, fruit, otherContractProposals)
     local economicDifficulty = g_currentMission.missionInfo.economicDifficulty
 
     local minWaitTime = 2
@@ -38,13 +39,23 @@ function PlowingContract:randomizeData(field, fruit)
     local callPrice = 75 * economicDifficulty
     local pricePerHa = 125 * economicDifficulty
 
+    -- TODO: invece che semplicmente randomizzare tra min e max wait time, creare 3 (o magari 4) "fascie di velocità", randomizzare prima la fascia e poi il tempo interno alla fascia ex. ( 2 >= veloce <= 6 ) ( 6>= medio <= 12 ) ( 12 >= lento <= 48) questo permetterebbe di, più o meno, garantire la varietà dei contratti in base all'esigenza e disponibilità economica
     self.waitTime = math.random(minWaitTime, maxWaitTime)
 
     local basePriceMultiplier = MathUtil.lerp(minWaitTimePriceMultiplier, maxWaitTimePriceMultiplier, Utility.normalize(minWaitTime, self.waitTime, maxWaitTime))
     local priceMultiplier = MathUtil.lerp(1, basePriceMultiplier, 0.1) -- priceMultiplier is 10% of basePriceMultiplier
 
-    self.basePrice = callPrice * basePriceMultiplier
-    self.price = pricePerHa * field.fieldArea * priceMultiplier
+    self.callPrice = callPrice * basePriceMultiplier
+    self.workPrice = pricePerHa * field.fieldArea * priceMultiplier
 
-    self.npc = g_npcManager:getRandomNPC()
+    -- prevents multiple contracts a single npc
+    repeat
+        self.npc = g_npcManager:getRandomNPC()
+    until (TableUtility.f_count(
+        otherContractProposals,
+        ---@type Contract
+        function(c)
+            return c.npc.imageFilename == self.npc.imageFilename
+        end
+    ) == 0)
 end

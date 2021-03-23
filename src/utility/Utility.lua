@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.0.0.0
+---@version 2.0.3.0
 ---@date 09/11/2020
 
 --- Utilities class
@@ -18,6 +18,16 @@ function Utility.clamp(minValue, value, maxValue)
     maxValue = maxValue or 1
     value = value or 0
     return math.max(minValue, math.min(maxValue, value))
+end
+
+--- Get random number sign (1 or -1)
+---@return number
+function Utility.randomSign()
+    if math.random(2) > 1 then
+        return -1
+    else
+        return 1
+    end
 end
 
 --- Normalize value by given maximum and minimum

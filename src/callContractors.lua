@@ -87,6 +87,7 @@ function CallContractors:onReadStream(streamId)
 end
 
 function CallContractors:onUpdate(dt)
+    self.contractsManager:update(dt)
 end
 
 function CallContractors:onUpdateTick(dt)
@@ -124,7 +125,7 @@ function CallContractors:onLoadHelpLine()
 end
 
 function CallContractors:openGui()
-    if not self.gui.isOpen then
+    if not self.gui.target:getIsOpen() then
         g_gui:showGui(self.gui.name)
     end
 end

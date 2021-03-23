@@ -15,17 +15,25 @@ function Contract.new(mt)
     ---@type Contract
     local self = setmetatable({}, mt or Contract_mt)
     ---@type number
-    self.ttl = 3600000 -- 1 hour
+    self.ttl = math.random(18, 54) * 100000 -- between 30 minutes and 1.5 hours
     ---@type number
-    self.expiration = g_time + 3600000
+    self.callPrice = 0 -- price to pay at contract sign
     ---@type number
-    self.basePrice = 0 -- price to pay at contract sign
-    ---@type number
-    self.price = 0 -- price to pay at job finished
+    self.workPrice = 0 -- price to pay at job finished
     ---@type number
     self.waitTime = 24 -- hours
     ---@type NPC
     self.npc = nil
+    ---@type number
+    self.fieldId = 0
+    ---@type number
+    self.fruitId = 0
+    ---@type string
+    self.tffKey = ""
+    ---@type bool
+    self.signed = false
+    ---@type number
+    self.jobTypeId = 0
     return self
 end
 
@@ -49,10 +57,20 @@ function Contract.fruitsFilter(fruit)
     return true
 end
 
+---@param tffKey string
 ---@param field any
 ---@param fruit any
-function Contract:randomizeData(field, fruit)
+---@param otherContractProposals Contract[]
+function Contract:randomizeData(tffKey, field, fruit, otherContractProposals)
 end
 
-function Contract:setData()
+---@param tffKey string
+---@param jobType JobType
+---@param fieldId number
+---@param fruitId number
+function Contract:setData(tffKey, jobType, fieldId, fruitId)
+    self.fieldId = fieldId
+    self.fruitId = fruitId
+    self.tffKey = tffKey
+    self.jobTypeId = jobType.id
 end

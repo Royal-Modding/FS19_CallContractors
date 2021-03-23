@@ -88,6 +88,10 @@ Fr description
 			<en>Payment amount:</en>
 			<it>Importo da pagare:</it>
 		</text>
+		<text name="gui_cc_sign">
+			<en>Sign contract</en>
+			<it>Accetta</it>
+		</text>
 	</l10n>
 </modDesc> <!--
 	<storeItems>

@@ -15,6 +15,8 @@ function Contract.new(mt)
     ---@type Contract
     local self = setmetatable({}, mt or Contract_mt)
     ---@type number
+    self.id = -1
+    ---@type number
     self.ttl = math.random(18, 54) * 100000 -- between 30 minutes and 1.5 hours
     ---@type number
     self.callPrice = 0 -- price to pay at contract sign
@@ -34,6 +36,8 @@ function Contract.new(mt)
     self.signed = false
     ---@type number
     self.jobTypeId = 0
+    ---@type number
+    self.runTimer = 0
     return self
 end
 
@@ -73,4 +77,12 @@ function Contract:setData(tffKey, jobType, fieldId, fruitId)
     self.fruitId = fruitId
     self.tffKey = tffKey
     self.jobTypeId = jobType.id
+end
+
+function Contract:getField()
+    return g_fieldManager:getFieldByIndex(self.fieldId)
+end
+
+function Contract:getFruit()
+    return g_fruitTypeManager:getFruitTypeByIndex(self.fruitId)
 end

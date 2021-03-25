@@ -2,58 +2,64 @@
 
 ---@author ${author}
 ---@version r_version_r
----@date 23/03/2021
+---@date 24/03/2021
 
----@class SignContractEvent
-SignContractEvent = {}
-SignContractEvent_mt = Class(SignContractEvent, Event)
+---@class SignContractSuccessEvent
+SignContractSuccessEvent = {}
+SignContractSuccessEvent_mt = Class(SignContractSuccessEvent, Event)
 
-InitEventClass(SignContractEvent, "SignContractEvent")
+InitEventClass(SignContractSuccessEvent, "SignContractSuccessEvent")
 
-function SignContractEvent:emptyNew()
-    local e = Event:new(SignContractEvent_mt)
-    e.className = "SignContractEvent"
+function SignContractSuccessEvent:emptyNew()
+    local e = Event:new(SignContractSuccessEvent_mt)
+    e.className = "SignContractSuccessEvent"
     return e
 end
 
 ---@param contract Contract
----@return SignContractEvent
-function SignContractEvent:new(contract)
-    ---@type SignContractEvent
-    local e = SignContractEvent:emptyNew()
+---@return SignContractSuccessEvent
+function SignContractSuccessEvent:new(contract)
+    ---@type SignContractSuccessEvent
+    local e = SignContractSuccessEvent:emptyNew()
     ---@type Contract
     e.contract = contract
     return e
 end
 
 ---@param streamId number
-function SignContractEvent:writeStream(streamId, _)
+function SignContractSuccessEvent:writeStream(streamId, _)
     streamWriteString(streamId, self.contract.tffKey)
     streamWriteUInt8(streamId, self.contract.fruitId)
     streamWriteUInt8(streamId, self.contract.waitTime)
     streamWriteUInt8(streamId, self.contract.jobTypeId)
+    streamWriteUInt16(streamId, self.contract.id)
     streamWriteUInt16(streamId, self.contract.npc.index)
     streamWriteUInt16(streamId, self.contract.fieldId)
     streamWriteFloat32(streamId, self.contract.callPrice)
     streamWriteFloat32(streamId, self.contract.workPrice)
+
 end
 
 ---@param streamId number
 ---@param connection any
-function SignContractEvent:readStream(streamId, connection)
+function SignContractSuccessEvent:readStream(streamId, connection)
     local tffKey = streamReadString(streamId)
     local fruitId = streamReadUInt8(streamId)
     local waitTime = streamReadUInt8(streamId)
     local jobTypeId = streamReadUInt8(streamId)
+    local id = streamReadUInt16(streamId)
     local npcIndex = streamReadUInt16(streamId)
     local fieldId = streamReadUInt16(streamId)
     local callPrice = streamReadFloat32(streamId)
     local workPrice = streamReadFloat32(streamId)
+    local runTimer = streamReadUIntN(streamId, 32)
 
     local jobType = CallContractors.JOB_TYPES[jobTypeId]
     self.contract = jobType.contractClass.new()
     self.contract:setData(tffKey, jobType, fieldId, fruitId)
+    self.contract.id = id
     self.contract.waitTime = waitTime
+    self.contract.runTimer = runTimer
     self.contract.callPrice = callPrice
     self.contract.workPrice = workPrice
     self.contract.npc = g_npcManager:getNPCByIndex(npcIndex) or g_npcManager:getRandomNPC()
@@ -61,21 +67,6 @@ function SignContractEvent:readStream(streamId, connection)
     self:run(connection)
 end
 
----@param connection any
-function SignContractEvent:run(connection)
-    if g_server ~= nil then
-        local success, error = CallContractors.contractsManager:signContract(self.contract)
-        if success then
-            g_server:broadcastEvent(SignContractSuccessEvent:new(self.contract), true)
-        else
-            connection:sendEvent(SignContractErrorEvent:new(self.contract, error))
-        end
-    else
-        g_debugManager:devError("[%s] SignContractEvent can only run server-side", CallContractors.name)
-    end
-end
-
----@param contract Contract
-function SignContractEvent.sendEvent(contract)
-    g_client:getServerConnection():sendEvent(SignContractEvent:new(contract))
+function SignContractSuccessEvent:run(_)
+    CallContractors.contractsManager:onContractSigned(self.contract)
 end

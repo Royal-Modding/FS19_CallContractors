@@ -6,6 +6,9 @@
 
 source(Utils.getFilename("events/signContractEvent.lua", g_currentModDirectory))
 source(Utils.getFilename("events/signContractErrorEvent.lua", g_currentModDirectory))
+source(Utils.getFilename("events/signContractSuccessEvent.lua", g_currentModDirectory))
+source(Utils.getFilename("events/cancelContractEvent.lua", g_currentModDirectory))
+source(Utils.getFilename("events/removeContractEvent.lua", g_currentModDirectory))
 
 ---@class ContractsManager
 ContractsManager = {}
@@ -16,19 +19,63 @@ ContractsManager.EVENT_TYPES = {}
 ContractsManager.EVENT_TYPES.PROPOSAL_EXPIRED = 1
 ContractsManager.EVENT_TYPES.CONTRACT_SIGNED = 2
 ContractsManager.EVENT_TYPES.CONTRACT_SIGN_ERROR = 3
+ContractsManager.EVENT_TYPES.CONTRACT_CANCELLED = 4
 
 ---@param jobTypes JobType[]
 ---@return ContractsManager
 function ContractsManager:load(jobTypes)
     self.JOB_TYPES = jobTypes
+
     self.contractProposalsByTffKey = {}
+    self.runningContracts = {}
+
+    self.nextContractId = 0
     self.maxContractsMin = 3
     self.maxContractsMax = 7
+
     self.eventListeners = {}
     for _, eventId in pairs(self.EVENT_TYPES) do
         self.eventListeners[eventId] = {}
     end
+
+    self.isServer = g_server ~= nil
+
     return self
+end
+
+function ContractsManager:getNextContractId()
+    self.nextContractId = self.nextContractId + 1
+    return self.nextContractId
+end
+
+function ContractsManager:getContractById(contractId)
+    return TableUtility.f_find(
+        self.runningContracts,
+        ---@type Contract
+        function(c)
+            return c.id == contractId
+        end
+    )
+end
+
+---@param jobType JobType
+---@param field any
+---@param fruit any
+---@return string tffKey
+function ContractsManager:getTffKey(jobType, field, fruit)
+    local tffKey = jobType.name
+    if jobType.requireFieldParam then
+        tffKey = string.format("%s_%d", tffKey, field.fieldId)
+    end
+    if jobType.requireFruitParam then
+        tffKey = string.format("%s_%s", tffKey, fruit.name)
+    end
+    return tffKey
+end
+
+---@param tffKey string
+function ContractsManager:getRunningContractByTffKey(tffKey)
+    return self.runningContracts[tffKey]
 end
 
 ---@param jobType JobType
@@ -78,21 +125,6 @@ function ContractsManager:generateNewContractProposal(jobType, field, fruit, con
     return contract
 end
 
----@param jobType JobType
----@param field any
----@param fruit any
----@return string tffKey
-function ContractsManager:getTffKey(jobType, field, fruit)
-    local tffKey = jobType.name
-    if jobType.requireFieldParam then
-        tffKey = string.format("%s_%d", tffKey, field.fieldId)
-    end
-    if jobType.requireFruitParam then
-        tffKey = string.format("%s_%s", tffKey, fruit.name)
-    end
-    return tffKey
-end
-
 ---@param contract Contract
 function ContractsManager:requestContractSign(contract)
     -- remove contract from proposals list
@@ -106,15 +138,44 @@ function ContractsManager:requestContractSign(contract)
 end
 
 ---@param contract Contract
-function ContractsManager:signContract(contract)
-    return false, SignContractErrorEvent.ERROR_TYPES.TEST
+function ContractsManager:requestContractCancel(contract)
+    CancelContractEvent.sendEvent(contract)
+end
 
-    --if g_server ~= nil then
-    --    return true
-    --else
-    --    g_debugManager:devError("[%s] ContractsManager:signContract can only run server-side", CallContractors.name)
-    --    return false, SignContractError.ERROR_TYPES.NOT_ON_SERVER
-    --end
+---@param contract Contract
+function ContractsManager:signContract(contract)
+    if self.isServer then
+        if not contract.canBePerformed(contract:getField(), contract:getFruit()) then
+            return false, SignContractErrorEvent.ERROR_TYPES.CANNOT_BE_PERFORMED
+        end
+
+        if self.runningContracts[contract.tffKey] ~= nil then
+            return false, SignContractErrorEvent.ERROR_TYPES.ALREADY_ACTIVE
+        end
+
+        -- TODO: remove money and try to ensure the right money message in MP
+        contract.runTimer = contract.waitTime * 60 * 60 * 1000 -- hours to ms
+        contract.id = self:getNextContractId()
+
+        return true
+    else
+        g_debugManager:devError("[%s] ContractsManager:signContract can only run server-side", CallContractors.name)
+        return false, SignContractErrorEvent.ERROR_TYPES.NOT_ON_SERVER
+    end
+end
+
+---@param contract Contract
+function ContractsManager:onContractSigned(contract)
+    contract.signed = true
+    print("")
+    print("#################################################")
+    print("Contract signed:")
+    print("#################################################")
+    DebugUtil.printTableRecursively(contract)
+    print("#################################################")
+    print("")
+    self.runningContracts[contract.tffKey] = contract
+    self:callEventListeners(self.EVENT_TYPES.CONTRACT_SIGNED, contract)
 end
 
 ---@param tffKey string
@@ -124,9 +185,15 @@ function ContractsManager:onContractSignError(tffKey, errorType)
     self:callEventListeners(self.EVENT_TYPES.CONTRACT_SIGN_ERROR, tffKey, errorType)
 end
 
----@param contract Contract
-function ContractsManager:onContractSigned(contract)
-    self:callEventListeners(self.EVENT_TYPES.CONTRACT_SIGNED, contract)
+---@param contractId number
+---@param reason number
+function ContractsManager:onContractRemoved(contractId, reason)
+    g_logManager:devInfo("[%s] onContractRemoved(contractId: %s, reason: %s)", CallContractors.name, contractId, TableUtility.indexOf(RemoveContractEvent.REASONS, reason))
+    local contract = self:getContractById(contractId)
+    self.runningContracts[contract.tffKey] = nil
+    if reason == RemoveContractEvent.REASONS.CANCELLED then
+        self:callEventListeners(self.EVENT_TYPES.CONTRACT_CANCELLED, contract)
+    end
 end
 
 ---@param dt number

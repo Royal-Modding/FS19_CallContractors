@@ -15,12 +15,14 @@
 ---@field gameEnv table game scripting environment
 ---@field super table mod super class
 ---@field debug boolean mod debug state
+---@field onValidateVehicleTypes function
 RoyalMod = {}
 
 ---@param debug boolean defines if debug is enabled
 ---@param mpSync boolean defines if mp sync is enabled
 ---@return RoyalMod
 function RoyalMod.new(debug, mpSync)
+    ---@type RoyalMod
     local mod = {}
     mod.directory = g_currentModDirectory
     mod.userProfileDirectory = getUserProfileAppPath()

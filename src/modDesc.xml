@@ -46,7 +46,7 @@ Fr description
 
 	<l10n>
 		<text name="input_CALL_CONTRACTORS_SHOW">
-			<en>N/D</en>
+			<en>Shows the contract management GUI (Call Contractors)</en>
 		</text>
 		<text name="cc_job_type_cultivating">
 			<en>Cultivating</en>
@@ -88,9 +88,31 @@ Fr description
 			<en>Payment amount:</en>
 			<it>Importo da pagare:</it>
 		</text>
+		<text name="gui_cc_remaining_payment_text">
+			<en>Remaining payment:</en>
+			<it>Pagamento residuo:</it>
+		</text>
 		<text name="gui_cc_sign">
 			<en>Sign contract</en>
 			<it>Accetta</it>
+		</text>
+		<text name="dialog_cc_cannot_be_performed">
+			<en>Contract signing cancelled, contract proposal was no longer valid!</en>
+		</text>
+		<text name="dialog_cc_already_active">
+			<en>Contract signing cancelled, looks like another one has already been signed!</en>
+		</text>
+		<text name="dialog_cc_signing_confirm_title">
+			<en>Are you sure you want to accept this contract?</en>
+		</text>
+		<text name="dialog_cc_signing_confirm_text">
+			<en>You'll have to pay %s now and an additional %s when the work is done.</en>
+		</text>
+		<text name="dialog_cc_cancel_confirm_title">
+			<en>Are you sure you want to cancel this contract?</en>
+		</text>
+		<text name="dialog_cc_cancel_confirm_text">
+			<en>You'll not be refunded of the convening fee.</en>
 		</text>
 	</l10n>
 </modDesc> <!--

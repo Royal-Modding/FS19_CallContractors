@@ -56,6 +56,7 @@
                     <GuiElement type="text" profile="ccLeftFee" text="1300€" />
                     <GuiElement type="text" profile="ccLeftFeeText" text="$l10n_gui_cc_remaining_payment_text" />
                     <GuiElement type="text" profile="ccJActive" text="$l10n_fieldJob_active" />
+                    <GuiElement type="text" profile="ccJActiveText" text="" />
                 </GuiElement>
             </GuiElement>
 

@@ -274,9 +274,17 @@
         <Value name="textColor" value="$preset_colorBlue" />
         <Value name="textSize" value="14px" />
         <Value name="textBold" value="true" />
-        <Value name="size" value="150px 20px" />
+        <Value name="size" value="100px 20px" />
         <Value name="textAlignment" value="right" />
         <Value name="position" value="-12px -18px" />
+    </Profile>
+
+    <Profile name="ccJActiveText" extends="ccJobTime" with="anchorTopLeft">
+        <Value name="textSize" value="14px" />
+        <Value name="textBold" value="true" />
+        <Value name="size" value="158px 20px" />
+        <Value name="textAlignment" value="left" />
+        <Value name="position" value="425px -18px" />
     </Profile>
 
     <Profile name="ccLeftFee" extends="ccJobTime" with="anchorTopRight">

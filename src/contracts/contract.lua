@@ -9,74 +9,64 @@ Contract = {}
 Contract_mt = Class(Contract)
 
 --- Contract base class
+---@param contractType ContractType
 ---@param mt? table custom meta table
 ---@return Contract
-function Contract.new(mt)
+function Contract.new(contractType, mt)
     ---@type Contract
     local self = setmetatable({}, mt or Contract_mt)
+
+    ---@type ContractType
+    self.contractType = contractType
+
     ---@type number
-    self.id = -1
-    ---@type number
-    self.ttl = math.random(18, 54) * 100000 -- between 30 minutes and 1.5 hours
-    ---@type number
-    self.callPrice = 0 -- price to pay at contract sign
-    ---@type number
-    self.workPrice = 0 -- price to pay at job finished
-    ---@type number
-    self.waitTime = 24 -- hours
-    ---@type NPC
-    self.npc = nil
+    self.farmId = 0
+
     ---@type number
     self.fieldId = 0
+
     ---@type number
     self.fruitId = 0
-    ---@type string
-    self.tffKey = ""
-    ---@type bool
-    self.signed = false
+
     ---@type number
-    self.jobTypeId = 0
+    self.callPrice = 0 -- price to pay at contract sign
+
     ---@type number
-    self.runTimer = 0
+    self.workPrice = 0 -- price to pay at job finished
+
+    ---@type number
+    self.waitTime = 24 -- hours
+
+    ---@type NPC
+    self.npc = nil
+
     return self
 end
 
----@param field any
----@param fruit any
+---@param farmId number
+---@param fieldId number
+---@param fruitId number
 ---@return boolean
-function Contract.canBePerformed(field, fruit)
+function Contract.checkPrerequisites(farmId, fieldId, fruitId)
     return false
 end
 
----@param field table
 ---@return boolean
-function Contract.fieldsFilter(field)
-    -- only owned fields
-    return g_farmlandManager:getFarmlandOwner(field.farmland.id) == g_currentMission.player.farmId
+function Contract:hasPrerequisites()
+    return self.checkPrerequisites(self.farmId, self.fieldId, self.fruitId)
 end
 
----@param fruit any
----@return boolean
-function Contract.fruitsFilter(fruit)
-    return true
-end
-
----@param tffKey string
----@param field any
----@param fruit any
----@param otherContractProposals Contract[]
-function Contract:randomizeData(tffKey, field, fruit, otherContractProposals)
-end
-
----@param tffKey string
----@param jobType JobType
+---@param farmId number
 ---@param fieldId number
 ---@param fruitId number
-function Contract:setData(tffKey, jobType, fieldId, fruitId)
+function Contract:load(farmId, fieldId, fruitId)
+    self.farmId = farmId
     self.fieldId = fieldId
     self.fruitId = fruitId
-    self.tffKey = tffKey
-    self.jobTypeId = jobType.id
+end
+
+---@param otherContractProposals ContractProposal[]
+function Contract:randomize(otherContractProposals)
 end
 
 function Contract:getField()
@@ -85,4 +75,29 @@ end
 
 function Contract:getFruit()
     return g_fruitTypeManager:getFruitTypeByIndex(self.fruitId)
+end
+
+function Contract:getFarm()
+    return g_farmManager:getFarmById(self.farmId)
+end
+
+function Contract:writeToStream(streamId)
+    streamWriteUInt8(streamId, self.fruitId)
+    streamWriteUInt8(streamId, self.farmId)
+    streamWriteUInt8(streamId, self.waitTime)
+    streamWriteUInt16(streamId, self.npc.index)
+    streamWriteUInt16(streamId, self.fieldId)
+    streamWriteFloat32(streamId, self.callPrice)
+    streamWriteFloat32(streamId, self.workPrice)
+end
+
+function Contract:readFromStream(streamId)
+    self.fruitId = streamReadUInt8(streamId)
+    self.farmId = streamReadUInt8(streamId)
+    self.waitTime = streamReadUInt8(streamId)
+    local npcIndex = streamReadUInt16(streamId)
+    self.npc = g_npcManager:getNPCByIndex(npcIndex) or g_npcManager:getRandomNPC()
+    self.fieldId = streamReadUInt16(streamId)
+    self.callPrice = streamReadFloat32(streamId)
+    self.workPrice = streamReadFloat32(streamId)
 end

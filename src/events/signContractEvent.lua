@@ -16,47 +16,32 @@ function SignContractEvent:emptyNew()
     return e
 end
 
----@param contract Contract
+---@param contractProposal ContractProposal
 ---@return SignContractEvent
-function SignContractEvent:new(contract)
+function SignContractEvent:new(contractProposal)
     ---@type SignContractEvent
     local e = SignContractEvent:emptyNew()
-    ---@type Contract
-    e.contract = contract
+    ---@type ContractProposal
+    e.contractProposal = contractProposal
     return e
 end
 
 ---@param streamId number
 function SignContractEvent:writeStream(streamId, _)
-    streamWriteString(streamId, self.contract.tffKey)
-    streamWriteUInt8(streamId, self.contract.fruitId)
-    streamWriteUInt8(streamId, self.contract.waitTime)
-    streamWriteUInt8(streamId, self.contract.jobTypeId)
-    streamWriteUInt16(streamId, self.contract.npc.index)
-    streamWriteUInt16(streamId, self.contract.fieldId)
-    streamWriteFloat32(streamId, self.contract.callPrice)
-    streamWriteFloat32(streamId, self.contract.workPrice)
+    streamWriteString(streamId, self.contractProposal.key)
+    streamWriteUInt8(streamId, self.contractProposal.contract.contractType.id)
+    self.contractProposal.contract:writeToStream(streamId)
 end
 
 ---@param streamId number
 ---@param connection any
 function SignContractEvent:readStream(streamId, connection)
-    local tffKey = streamReadString(streamId)
-    local fruitId = streamReadUInt8(streamId)
-    local waitTime = streamReadUInt8(streamId)
-    local jobTypeId = streamReadUInt8(streamId)
-    local npcIndex = streamReadUInt16(streamId)
-    local fieldId = streamReadUInt16(streamId)
-    local callPrice = streamReadFloat32(streamId)
-    local workPrice = streamReadFloat32(streamId)
-
-    local jobType = CallContractors.JOB_TYPES[jobTypeId]
-    self.contract = jobType.contractClass.new()
-    self.contract:setData(tffKey, jobType, fieldId, fruitId)
-    self.contract.waitTime = waitTime
-    self.contract.callPrice = callPrice
-    self.contract.workPrice = workPrice
-    self.contract.npc = g_npcManager:getNPCByIndex(npcIndex) or g_npcManager:getRandomNPC()
+    local pKey = streamReadString(streamId)
+    local contractTypeId = streamReadUInt8(streamId)
+    local contractType = g_callContractors.CONTRACT_TYPES[contractTypeId]
+    local contract = contractType:getContractInstance()
+    contract:readFromStream(streamId)
+    self.contractProposal = ContractProposal.new(pKey, contract)
 
     self:run(connection)
 end
@@ -64,18 +49,18 @@ end
 ---@param connection any
 function SignContractEvent:run(connection)
     if g_server ~= nil then
-        local success, error = CallContractors.contractsManager:signContract(self.contract)
+        local success, errorOrSignedContract = g_contractsManager:signContract(self.contractProposal)
         if success then
-            g_server:broadcastEvent(SignContractSuccessEvent:new(self.contract), true)
+            g_server:broadcastEvent(SignContractSuccessEvent:new(errorOrSignedContract), true)
         else
-            connection:sendEvent(SignContractErrorEvent:new(self.contract, error))
+            connection:sendEvent(SignContractErrorEvent:new(self.contractProposal, errorOrSignedContract))
         end
     else
         g_debugManager:devError("[%s] SignContractEvent can only run server-side", CallContractors.name)
     end
 end
 
----@param contract Contract
-function SignContractEvent.sendEvent(contract)
-    g_client:getServerConnection():sendEvent(SignContractEvent:new(contract))
+---@param contractProposal ContractProposal
+function SignContractEvent.sendEvent(contractProposal)
+    g_client:getServerConnection():sendEvent(SignContractEvent:new(contractProposal))
 end

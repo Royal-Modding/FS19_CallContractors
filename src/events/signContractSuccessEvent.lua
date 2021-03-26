@@ -16,57 +16,44 @@ function SignContractSuccessEvent:emptyNew()
     return e
 end
 
----@param contract Contract
+---@param signedContract SignedContract
 ---@return SignContractSuccessEvent
-function SignContractSuccessEvent:new(contract)
+function SignContractSuccessEvent:new(signedContract)
     ---@type SignContractSuccessEvent
     local e = SignContractSuccessEvent:emptyNew()
-    ---@type Contract
-    e.contract = contract
+    ---@type SignedContract
+    e.signedContract = signedContract
     return e
 end
 
 ---@param streamId number
 function SignContractSuccessEvent:writeStream(streamId, _)
-    streamWriteString(streamId, self.contract.tffKey)
-    streamWriteUInt8(streamId, self.contract.fruitId)
-    streamWriteUInt8(streamId, self.contract.waitTime)
-    streamWriteUInt8(streamId, self.contract.jobTypeId)
-    streamWriteUInt16(streamId, self.contract.id)
-    streamWriteUInt16(streamId, self.contract.npc.index)
-    streamWriteUInt16(streamId, self.contract.fieldId)
-    streamWriteFloat32(streamId, self.contract.callPrice)
-    streamWriteFloat32(streamId, self.contract.workPrice)
-
+    streamWriteString(streamId, self.signedContract.key)
+    streamWriteUInt8(streamId, self.signedContract.contract.contractType.id)
+    streamWriteUInt16(streamId, self.signedContract.id)
+    streamWriteUIntN(streamId, self.signedContract.ttl, 32)
+    self.signedContract.contract:writeToStream(streamId)
 end
 
 ---@param streamId number
 ---@param connection any
 function SignContractSuccessEvent:readStream(streamId, connection)
-    local tffKey = streamReadString(streamId)
-    local fruitId = streamReadUInt8(streamId)
-    local waitTime = streamReadUInt8(streamId)
-    local jobTypeId = streamReadUInt8(streamId)
+    local sKey = streamReadString(streamId)
+    local contractTypeId = streamReadUInt8(streamId)
     local id = streamReadUInt16(streamId)
-    local npcIndex = streamReadUInt16(streamId)
-    local fieldId = streamReadUInt16(streamId)
-    local callPrice = streamReadFloat32(streamId)
-    local workPrice = streamReadFloat32(streamId)
-    local runTimer = streamReadUIntN(streamId, 32)
+    local ttl = streamReadUIntN(streamId, 32)
 
-    local jobType = CallContractors.JOB_TYPES[jobTypeId]
-    self.contract = jobType.contractClass.new()
-    self.contract:setData(tffKey, jobType, fieldId, fruitId)
-    self.contract.id = id
-    self.contract.waitTime = waitTime
-    self.contract.runTimer = runTimer
-    self.contract.callPrice = callPrice
-    self.contract.workPrice = workPrice
-    self.contract.npc = g_npcManager:getNPCByIndex(npcIndex) or g_npcManager:getRandomNPC()
+    local contractType = g_callContractors.CONTRACT_TYPES[contractTypeId]
+    local contract = contractType:getContractInstance()
+    contract:readFromStream(streamId)
+
+    self.signedContract = SignedContract.new(sKey, contract)
+    self.signedContract.id = id
+    self.signedContract.ttl = ttl
 
     self:run(connection)
 end
 
 function SignContractSuccessEvent:run(_)
-    CallContractors.contractsManager:onContractSigned(self.contract)
+    g_contractsManager:onContractSigned(self.signedContract)
 end

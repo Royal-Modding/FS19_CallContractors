@@ -16,42 +16,41 @@ function CancelContractEvent:emptyNew()
     return e
 end
 
----@param contract Contract
+---@param signedContract SignedContract
 ---@return CancelContractEvent
-function CancelContractEvent:new(contract)
+function CancelContractEvent:new(signedContract)
     ---@type CancelContractEvent
     local e = CancelContractEvent:emptyNew()
     ---@type number
-    e.contractId = contract.id
+    e.signedContractId = signedContract.id
     return e
 end
 
 ---@param streamId number
 function CancelContractEvent:writeStream(streamId, _)
-    streamWriteUInt16(streamId, self.contractId)
+    streamWriteUInt16(streamId, self.signedContractId)
 end
 
 ---@param streamId number
 ---@param connection any
 function CancelContractEvent:readStream(streamId, connection)
-    self.contractId = streamReadUInt16(streamId)
+    self.signedContractId = streamReadUInt16(streamId)
     self:run(connection)
 end
 
----@param connection any
-function CancelContractEvent:run(connection)
+function CancelContractEvent:run(_)
     if g_server ~= nil then
-        if CallContractors.contractsManager:getContractById(self.contractId) ~= nil then
-            RemoveContractEvent.sendEvent(self.contractId, RemoveContractEvent.REASONS.CANCELLED)
+        if g_contractsManager:getSignedContractById(self.signedContractId) ~= nil then
+            RemoveContractEvent.sendEvent(self.signedContractId, RemoveContractEvent.REASONS.CANCELLED)
         else
-            g_debugManager:devError("[%s] Can't find contract with id = %d", CallContractors.name, self.contractId)
+            g_debugManager:devError("[%s] Can't find contract with id = %d", CallContractors.name, self.signedContractId)
         end
     else
         g_debugManager:devError("[%s] CancelContractEvent can only run server-side", CallContractors.name)
     end
 end
 
----@param contract Contract
-function CancelContractEvent.sendEvent(contract)
-    g_client:getServerConnection():sendEvent(CancelContractEvent:new(contract))
+---@param signedContract SignContractEvent
+function CancelContractEvent.sendEvent(signedContract)
+    g_client:getServerConnection():sendEvent(CancelContractEvent:new(signedContract))
 end

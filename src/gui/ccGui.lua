@@ -12,14 +12,14 @@
 ---@field ccContractItemTemplate any
 ---@field ccList any
 ---@field ccFieldSelector any
----@field ccJobTypeSelector any
+---@field ccContractTypeSelector any
 ---@field ccFruitSelector any
 ---@field ccNoContractsBox any
 ---@field ccActivateButton any
 ---@field ccCancelButton any
 ---@field ccContractSigningImageBg any
 CCGui = {}
-CCGui.CONTROLS = {"ccProposalItemTemplate", "ccContractItemTemplate", "ccList", "ccFieldSelector", "ccJobTypeSelector", "ccFruitSelector", "ccNoContractsBox", "ccActivateButton", "ccCancelButton", "ccContractSigningImageBg"}
+CCGui.CONTROLS = {"ccProposalItemTemplate", "ccContractItemTemplate", "ccList", "ccFieldSelector", "ccContractTypeSelector", "ccFruitSelector", "ccNoContractsBox", "ccActivateButton", "ccCancelButton", "ccContractSigningImageBg"}
 
 local CCGui_mt = Class(CCGui, ScreenElement)
 
@@ -30,6 +30,13 @@ function CCGui:new(target)
     local o = ScreenElement:new(target, CCGui_mt)
     o.returnScreenName = ""
 
+    ---@type ContractType[]
+    o.contractTypes = {}
+    ---@type ContractType[]
+    o.contractTypesMapping = {}
+    ---@type ContractType
+    o.selectedContractType = nil
+
     o.fields = {}
     o.fieldsMapping = {}
     o.selectedField = nil
@@ -38,15 +45,16 @@ function CCGui:new(target)
     o.fruitsMapping = {}
     o.selectedFruit = nil
 
-    ---@type JobType
-    o.selectedJobType = nil
-
-    o.currentTffKey = "nil"
-
-    o.signingContractTffKeys = {}
+    o.currentContractProposalKey = "nil"
+    o.currentSignedContractKey = "nil"
 
     ---@type DelayedCallBack
     o.removeSigningContractDCB = DelayedCallBack:new(CCGui.onRemoveSigningContractDCB, o)
+
+    o.currentFarmId = 0
+
+    ---@type CCGuiSigningContractsLocker
+    o.locker = CCGuiSigningContractsLocker:new()
 
     o:registerControls(CCGui.CONTROLS)
 
@@ -54,17 +62,7 @@ function CCGui:new(target)
 end
 
 function CCGui:onCreate()
-    self.ccJobTypeSelector:setTexts(
-        TableUtility.map(
-            CallContractors.JOB_TYPES,
-            ---@param ct JobType
-            ---@return string
-            function(ct)
-                return ct.title
-            end
-        )
-    )
-
+    self.contractTypes = g_callContractors.CONTRACT_TYPES
     self.fields = g_fieldManager:getFields()
     self.fruits = g_fruitTypeManager:getFruitTypes()
 
@@ -77,13 +75,33 @@ function CCGui:onCreate()
     self.ccContractSigningImageBg.elements[1]:setImageFilename(Utils.getFilename("img/cs_icon.dds", CallContractors.guiDirectory))
 end
 
-function CCGui:onOpen()
-    self.signingContractTffKeys = {}
+---@param farmId number
+---@return number
+function CCGui:onPreOpen(farmId)
+    self.currentFarmId = farmId
+    local texts = {}
+    self.contractTypesMapping = {}
+    for _, contractType in pairs(self.contractTypes) do
+        if contractType.checkPrerequisites(farmId) then
+            table.insert(texts, contractType.title)
+            table.insert(self.contractTypesMapping, contractType)
+        end
+    end
+    -- don't setTexts if there's nothing to insert, otherwise the "multi text option state" is set to a wrong state (probably nil or -1)
+    if #texts > 0 then
+        self.ccContractTypeSelector:setTexts(texts)
+        self.selectedContractType = self.contractTypesMapping[self.ccContractTypeSelector:getState()]
+    end
+    return #texts
+end
 
-    CallContractors.contractsManager:addEventListener(ContractsManager.EVENT_TYPES.PROPOSAL_EXPIRED, self, "onProposalExpired")
-    CallContractors.contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_SIGNED, self, "onContractSigned")
-    CallContractors.contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_SIGN_ERROR, self, "onContractSignError")
-    CallContractors.contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_CANCELLED, self, "onContractRemoved")
+function CCGui:onOpen()
+    self.locker:clear()
+
+    g_contractsManager:addEventListener(ContractsManager.EVENT_TYPES.PROPOSAL_EXPIRED, self, "onProposalExpired")
+    g_contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_SIGNED, self, "onContractSigned")
+    g_contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_SIGN_ERROR, self, "onContractSignError")
+    g_contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_CANCELLED, self, "onContractRemoved")
 
     -- preload texts to ensure that there's always something to show
     self:updateFieldSelectorTexts(
@@ -106,52 +124,59 @@ function CCGui:onOpen()
 end
 
 function CCGui:onClose()
-    CallContractors.contractsManager:removeEventListeners(self)
+    g_contractsManager:removeEventListeners(self)
     CCGui:superClass().onClose(self)
 end
 
 function CCGui:refreshList()
-    self.currentTffKey = CallContractors.contractsManager:getTffKey(self.selectedJobType, self.selectedField, self.selectedFruit)
-    ---@type Contract
-    local runningContract = CallContractors.contractsManager:getRunningContractByTffKey(self.currentTffKey)
-    if runningContract ~= nil then
-        self.ccList:deleteListItems()
+    self.currentContractProposalKey = self.selectedContractType:getContractProposalKey(self.currentFarmId, self.selectedField.fieldId, self.selectedFruit.index)
+    self.currentSignedContractKey = self.selectedContractType:getSignedContractKey(self.currentFarmId, self.selectedField.fieldId, self.selectedFruit.index)
+
+    self.ccList:deleteListItems()
+
+    local signedContract = g_contractsManager:getSignedContractByKey(self.currentSignedContractKey)
+    if signedContract ~= nil then
+        local contract = signedContract.contract
         local new = self.ccContractItemTemplate:clone(self.ccList)
         new:setVisible(true)
-        new.elements[1].elements[1]:setImageFilename(runningContract.npc.imageFilename)
-        new.elements[2]:setText(runningContract.npc.title)
-        new.elements[3]:setText(string.format(g_i18n:getText("gui_cc_job_time_text"), math.ceil(runningContract.runTimer / 60 / 60 / 1000))) -- ms to hours
-        new.elements[4]:setText(g_i18n:formatMoney(runningContract.workPrice))
+        new.elements[1].elements[1]:setImageFilename(contract.npc.imageFilename)
+        new.elements[2]:setText(contract.npc.title)
+        new.elements[3]:setText(string.format(g_i18n:getText("gui_cc_job_time_text"), math.ceil(signedContract.ttl / 60 / 60 / 1000))) -- ms to hours
+        new.elements[4]:setText(g_i18n:formatMoney(contract.workPrice))
         new:updateAbsolutePosition()
-        new.contract = runningContract
+        new.signedContract = signedContract
+
+        self.ccNoContractsBox:setVisible(false)
     else
-        ---@type Contract[]
-        local contractProposals = CallContractors.contractsManager:getContractProposals(self.selectedJobType, self.selectedField, self.selectedFruit)
+        ---@type ContractProposal[]
+        local contractProposals = g_contractsManager:getProposals(self.selectedContractType, self.currentFarmId, self.selectedField.fieldId, self.selectedFruit.index)
         table.sort(
             contractProposals,
-            ---@param a Contract
-            ---@param b Contract
+            ---@param a ContractProposal
+            ---@param b ContractProposal
             ---@return bool
             function(a, b)
-                return a.waitTime < b.waitTime
+                return a.contract.waitTime < b.contract.waitTime
             end
         )
-        self.ccNoContractsBox:setVisible(#contractProposals <= 0)
-        self.ccList:deleteListItems()
-        ---@type Contract
-        for _, c in pairs(contractProposals) do
+
+        for _, cp in pairs(contractProposals) do
+            local contract = cp.contract
             local new = self.ccProposalItemTemplate:clone(self.ccList)
             new:setVisible(true)
-            new.elements[1].elements[1]:setImageFilename(c.npc.imageFilename)
-            new.elements[2]:setText(c.npc.title)
-            new.elements[3]:setText(string.format(g_i18n:getText("gui_cc_job_time_text"), c.waitTime))
-            new.elements[4]:setText(g_i18n:formatMoney(c.callPrice))
-            new.elements[5]:setText(g_i18n:formatMoney(c.workPrice))
-            new.elements[6]:setText(g_i18n:formatMoney(c.callPrice + c.workPrice))
+            new.elements[1].elements[1]:setImageFilename(contract.npc.imageFilename)
+            new.elements[2]:setText(contract.npc.title)
+            new.elements[3]:setText(string.format(g_i18n:getText("gui_cc_job_time_text"), contract.waitTime))
+            new.elements[4]:setText(g_i18n:formatMoney(contract.callPrice))
+            new.elements[5]:setText(g_i18n:formatMoney(contract.workPrice))
+            new.elements[6]:setText(g_i18n:formatMoney(contract.callPrice + contract.workPrice))
             new:updateAbsolutePosition()
-            new.contract = c
+            new.contractProposal = cp
         end
+
+        self.ccNoContractsBox:setVisible(#contractProposals <= 0)
     end
+
     self:refreshButtons()
     self:refreshSigningOverlay()
 end
@@ -161,10 +186,10 @@ function CCGui:refreshButtons()
     local cancel = false
     local element = self.ccList:getSelectedElement()
     if self.ccList:getItemCount() > 0 and element ~= nil then
-        if element.contract.signed then
-            cancel = true
-        else
+        if element.contractProposal ~= nil then
             activate = true
+        else
+            cancel = true
         end
     end
     self.ccActivateButton:setVisible(activate)
@@ -174,8 +199,12 @@ function CCGui:refreshButtons()
 end
 
 function CCGui:refreshSigningOverlay()
-    self.ccContractSigningImageBg:setVisible(self.signingContractTffKeys[self.currentTffKey])
-    self.ccList:setVisible(not self.signingContractTffKeys[self.currentTffKey])
+    local isLocked = self.locker:getIsLocked(self.currentSignedContractKey)
+    self.ccContractSigningImageBg:setVisible(isLocked)
+    self.ccList:setVisible(not isLocked)
+    if isLocked then
+        self.ccNoContractsBox:setVisible(false)
+    end
 end
 
 ---@param fields table
@@ -184,7 +213,7 @@ function CCGui:updateFieldSelectorTexts(fields, filter)
     local texts = {}
     self.fieldsMapping = {}
     for _, field in pairs(fields) do
-        if filter(field) then
+        if filter(self.currentFarmId, field) then
             table.insert(texts, field.fieldId)
             table.insert(self.fieldsMapping, field)
         end
@@ -199,7 +228,7 @@ function CCGui:updateFruitSelectorTexts(fruits, filter)
     local texts = {}
     self.fruitsMapping = {}
     for _, fruit in pairs(fruits) do
-        if filter(fruit) then
+        if filter(self.currentFarmId, fruit) then
             table.insert(texts, fruit.fillType.title)
             table.insert(self.fruitsMapping, fruit)
         end
@@ -213,14 +242,14 @@ function CCGui:update(dt)
     self.removeSigningContractDCB:update(dt)
 end
 
-function CCGui:onListSelectionChanged(rowIndex)
+function CCGui:onListSelectionChanged()
     self:refreshButtons()
 end
 
 function CCGui:onClickCancel()
-    if not self.signingContractTffKeys[self.currentTffKey] then
+    if not self.locker:getIsLocked(self.currentSignedContractKey) then
         local element = self.ccList:getSelectedElement()
-        if element ~= nil and element.contract.signed then
+        if element ~= nil and element.signedContract ~= nil then
             g_gui:showYesNoDialog(
                 {
                     text = g_i18n:getText("dialog_cc_cancel_confirm_text"),
@@ -237,23 +266,23 @@ end
 function CCGui:onClickCancelDialogCallback(yes)
     if yes then
         local element = self.ccList:getSelectedElement()
-        if element ~= nil and element.contract.signed then
-            ---@type Contract
-            local contract = element.contract
-            CallContractors.contractsManager:requestContractCancel(contract)
+        if element ~= nil and element.signedContract ~= nil then
+            ---@type SignedContract
+            local sContract = element.signedContract
+            g_contractsManager:requestContractCancel(sContract)
         end
     end
 end
 
 function CCGui:onClickActivate()
-    if not self.signingContractTffKeys[self.currentTffKey] then
+    if not self.locker:getIsLocked(self.currentSignedContractKey) then
         local element = self.ccList:getSelectedElement()
-        if element ~= nil and not element.contract.signed then
-            ---@type Contract
-            local contract = element.contract
+        if element ~= nil and element.contractProposal ~= nil then
+            ---@type ContractProposal
+            local cProposal = element.contractProposal
             g_gui:showYesNoDialog(
                 {
-                    text = g_i18n:getText("dialog_cc_signing_confirm_text"):format(g_i18n:formatMoney(contract.callPrice), g_i18n:formatMoney(contract.workPrice)),
+                    text = g_i18n:getText("dialog_cc_signing_confirm_text"):format(g_i18n:formatMoney(cProposal.contract.callPrice), g_i18n:formatMoney(cProposal.contract.workPrice)),
                     title = g_i18n:getText("dialog_cc_signing_confirm_title"),
                     callback = self.onClickActivateDialogCallback,
                     target = self
@@ -267,12 +296,12 @@ end
 function CCGui:onClickActivateDialogCallback(yes)
     if yes then
         local element = self.ccList:getSelectedElement()
-        if element ~= nil and not element.contract.signed then
-            ---@type Contract
-            local contract = element.contract
-            self.signingContractTffKeys[contract.tffKey] = true
+        if element ~= nil and element.contractProposal ~= nil then
+            ---@type ContractProposal
+            local cProposal = element.contractProposal
+            self.locker:addLock(self.currentContractProposalKey, self.currentSignedContractKey)
             self:refreshSigningOverlay()
-            CallContractors.contractsManager:requestContractSign(contract)
+            g_contractsManager:requestContractSign(cProposal)
         end
     end
 end
@@ -281,36 +310,29 @@ function CCGui:onEscPressed()
     self:onClickBack()
 end
 
----@param tffKey string
-function CCGui:onProposalExpired(tffKey)
-    if tffKey == self.currentTffKey then
+---@param contractProposalKey string
+function CCGui:onProposalExpired(contractProposalKey)
+    if contractProposalKey == self.currentContractProposalKey then
         self:refreshList()
     end
 end
 
----@param contract Contract
-function CCGui:onContractRemoved(contract)
-    if contract.tffKey == self.currentTffKey then
-        self:refreshList()
-    end
+---@param signedContract SignedContract
+function CCGui:onContractSigned(signedContract)
+    self.removeSigningContractDCB:call(250, signedContract.key)
 end
 
----@param contract Contract
-function CCGui:onContractSigned(contract)
-    self.removeSigningContractDCB:call(500, contract.tffKey)
-end
-
----@param tffKey string
+---@param contractProposalKey string
 ---@param errorType number
-function CCGui:onContractSignError(tffKey, errorType)
-    self.removeSigningContractDCB:call(1000, tffKey, errorType)
+function CCGui:onContractSignError(contractProposalKey, errorType)
+    self.removeSigningContractDCB:call(750, contractProposalKey, errorType)
 end
 
----@param tffKey string
+---@param key string
 ---@param errorType number
-function CCGui:onRemoveSigningContractDCB(tffKey, errorType)
-    self.signingContractTffKeys[tffKey] = nil
-    if tffKey == self.currentTffKey then
+function CCGui:onRemoveSigningContractDCB(key, errorType)
+    self.locker:removeLock(key)
+    if key == self.currentContractProposalKey or key == self.currentSignedContractKey then
         self:refreshList()
     end
 
@@ -323,38 +345,41 @@ function CCGui:onRemoveSigningContractDCB(tffKey, errorType)
     end
 end
 
----@param state number
----@param element any
-function CCGui:onJobTypeSelectionChange(state, element)
-    self:onJobTypeSelectionChanged()
-end
-
-function CCGui:onJobTypeSelectionChanged()
-    self.selectedJobType = CallContractors.JOB_TYPES[self.ccJobTypeSelector:getState()]
-
-    self.ccFieldSelector:setDisabled(not self.selectedJobType.requireFieldParam)
-    if self.selectedJobType.requireFieldParam then
-        self:updateFieldSelectorTexts(self.fields, self.selectedJobType.contractClass.fieldsFilter)
+---@param signedContract SignedContract
+function CCGui:onContractRemoved(signedContract)
+    if signedContract.key == self.currentSignedContractKey then
+        self:refreshList()
     end
-
-    self.ccFruitSelector:setDisabled(not self.selectedJobType.requireFruitParam)
-    if self.selectedJobType.requireFruitParam then
-        self:updateFruitSelectorTexts(self.fruits, self.selectedJobType.contractClass.fruitsFilter)
-    end
-
-    self:refreshList()
 end
 
 ---@param state number
----@param element any
-function CCGui:onFieldSelectionChange(state, element)
+function CCGui:onFieldSelectionChange(state)
     self.selectedField = self.fieldsMapping[state]
     self:refreshList()
 end
 
 ---@param state number
----@param element any
-function CCGui:onFruitSelectionChange(state, element)
+function CCGui:onFruitSelectionChange(state)
     self.selectedFruit = self.fruitsMapping[state]
+    self:refreshList()
+end
+
+---@param state number
+function CCGui:onJobTypeSelectionChange(state)
+    self.selectedContractType = self.contractTypesMapping[state]
+    self:onJobTypeSelectionChanged()
+end
+
+function CCGui:onJobTypeSelectionChanged()
+    self.ccFieldSelector:setDisabled(not self.selectedContractType.requireFieldParam)
+    if self.selectedContractType.requireFieldParam then
+        self:updateFieldSelectorTexts(self.fields, self.selectedContractType.fieldsFilter)
+    end
+
+    self.ccFruitSelector:setDisabled(not self.selectedContractType.requireFruitParam)
+    if self.selectedContractType.requireFruitParam then
+        self:updateFruitSelectorTexts(self.fruits, self.selectedContractType.fruitsFilter)
+    end
+
     self:refreshList()
 end

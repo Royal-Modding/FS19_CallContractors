@@ -4,6 +4,8 @@
 ---@version r_version_r
 ---@date 18/03/2021
 
+---@diagnostic disable: lowercase-global
+
 InitRoyalMod(Utils.getFilename("rmod/", g_currentModDirectory))
 InitRoyalUtility(Utils.getFilename("utility/", g_currentModDirectory))
 
@@ -11,6 +13,10 @@ InitRoyalUtility(Utils.getFilename("utility/", g_currentModDirectory))
 CallContractors = RoyalMod.new(r_debug_r, false)
 
 function CallContractors:initialize()
+    self.gameEnv["g_callContractors"] = self
+    ---@type CallContractors
+    g_callContractors = self
+
     self.guiDirectory = Utils.getFilename("gui/", self.directory)
 
     Utility.overwrittenFunction(Player, "new", PlayerExtension.new)
@@ -18,20 +24,28 @@ function CallContractors:initialize()
         Player.showCallContractorsActionEvent = PlayerExtension.showCallContractorsActionEvent
     end
 
+    source(Utils.getFilename("contractTypes/contractType.lua", self.directory))
+    source(Utils.getFilename("contractTypes/sowingContractType.lua", self.directory))
+
+    source(Utils.getFilename("contracts/encapsulation/contractProposal.lua", self.directory))
+    source(Utils.getFilename("contracts/encapsulation/signedContract.lua", self.directory))
+
     source(Utils.getFilename("contracts/contract.lua", self.directory))
     source(Utils.getFilename("contracts/cultivatingContract.lua", self.directory))
     source(Utils.getFilename("contracts/plowingContract.lua", self.directory))
     source(Utils.getFilename("contracts/sowingContract.lua", self.directory))
     source(Utils.getFilename("contracts/sellingGoodsContract.lua", self.directory))
 
-    ---@type JobType[]
-    self.JOB_TYPES = {}
-    self.JOB_TYPES[1] = {id = 1, contractClass = CultivatingContract, name = "cultivating", title = g_i18n:getText("cc_job_type_cultivating"), requireFieldParam = true, requireFruitParam = false}
-    self.JOB_TYPES[2] = {id = 2, contractClass = PlowingContract, name = "plowing", title = g_i18n:getText("cc_job_type_plowing"), requireFieldParam = true, requireFruitParam = false}
-    self.JOB_TYPES[3] = {id = 3, contractClass = SowingContract, name = "sowing", title = g_i18n:getText("cc_job_type_sowing"), requireFieldParam = true, requireFruitParam = true}
-    self.JOB_TYPES[4] = {id = 4, contractClass = SellingGoodsContract, name = "sellingGoods", title = g_i18n:getText("cc_job_type_selling_goods"), requireFieldParam = false, requireFruitParam = true}
+    ---@type ContractType[]
+    self.CONTRACT_TYPES = {}
+    self.CONTRACT_TYPES[1] = ContractType.new(1, PlowingContract, "plowing_contract_type", g_i18n:getText("cc_job_type_plowing"))
+    self.CONTRACT_TYPES[2] = ContractType.new(2, CultivatingContract, "cultivating_contract_type", g_i18n:getText("cc_job_type_cultivating"))
+    self.CONTRACT_TYPES[3] = SowingContractType.new(3, SowingContract, "sowing_contract_type", g_i18n:getText("cc_job_type_sowing"))
+    --self.JOB_TYPES[4] = {id = 4, contractClass = SellingGoodsContract, name = "sellingGoods", title = g_i18n:getText("cc_job_type_selling_goods"), requireFieldParam = false, requireFruitParam = true}
 
-    self.contractsManager = ContractsManager:load(self.JOB_TYPES)
+    self.contractsManager = ContractsManager:load()
+    ---@type ContractsManager
+    g_contractsManager = self.contractsManager
 
     g_gui:loadProfiles(self.guiDirectory .. "guiProfiles.xml")
 
@@ -126,6 +140,14 @@ end
 
 function CallContractors:openGui()
     if not self.gui.target:getIsOpen() then
-        g_gui:showGui(self.gui.name)
+        if g_currentMission.player.farmId ~= 0 then
+            if self.gui.target:onPreOpen(g_currentMission.player.farmId) > 0 then
+                g_gui:showGui(self.gui.name)
+            else
+                g_currentMission:showBlinkingWarning(g_i18n:getText("warning_cc_noFarmlands"), 3000)
+            end
+        else
+            g_currentMission:showBlinkingWarning(g_i18n:getText("warning_cc_noFarm"), 3000)
+        end
     end
 end

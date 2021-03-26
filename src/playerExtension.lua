@@ -23,5 +23,5 @@ function PlayerExtension:new(superFunc, isServer, isClient)
 end
 
 function PlayerExtension:showCallContractorsActionEvent()
-    CallContractors:openGui();
+    g_callContractors:openGui()
 end

@@ -8,7 +8,7 @@
             <GuiElement type="text" profile="dialogHeaderText" text="$l10n_gui_cc_container_title" />
         </GuiElement>
 
-        <GuiElement type="multiTextOption" profile="jobTypeSelector" onClick="onJobTypeSelectionChange" onCreate="onCreateElement" id="ccJobTypeSelector">
+        <GuiElement type="multiTextOption" profile="jobTypeSelector" onClick="onJobTypeSelectionChange" onCreate="onCreateElement" id="ccContractTypeSelector">
             <GuiElement type="button" profile="multiTextOptionSettingsLeft" />
             <GuiElement type="button" profile="multiTextOptionSettingsRight" />
             <GuiElement type="text" profile="multiTextOptionSettingsText" />

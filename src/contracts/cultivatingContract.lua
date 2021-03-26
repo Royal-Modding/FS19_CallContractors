@@ -9,10 +9,11 @@ CultivatingContract = {}
 CultivatingContract_mt = Class(CultivatingContract, Contract)
 
 --- CultivatingContract class
+---@param contractType ContractType
 ---@param mt? table custom meta table
 ---@return CultivatingContract
-function CultivatingContract.new(mt)
+function CultivatingContract.new(contractType, mt)
     ---@type CultivatingContract
-    local self = Contract.new(mt or CultivatingContract_mt)
+    local self = Contract.new(contractType, mt or CultivatingContract_mt)
     return self
 end

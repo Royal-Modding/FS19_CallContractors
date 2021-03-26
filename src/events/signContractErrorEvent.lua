@@ -21,32 +21,32 @@ function SignContractErrorEvent:emptyNew()
     return e
 end
 
----@param contract Contract
+---@param contractProposal ContractProposal
 ---@param errorType number
 ---@return SignContractErrorEvent
-function SignContractErrorEvent:new(contract, errorType)
+function SignContractErrorEvent:new(contractProposal, errorType)
     ---@type SignContractErrorEvent
     local e = SignContractErrorEvent:emptyNew()
     ---@type Contract
-    e.tffKey = contract.tffKey
+    e.contractProposalKey = contractProposal.key
     e.errorType = errorType
     return e
 end
 
 ---@param streamId number
 function SignContractErrorEvent:writeStream(streamId, _)
-    streamWriteString(streamId, self.tffKey)
+    streamWriteString(streamId, self.contractProposalKey)
     streamWriteUInt8(streamId, self.errorType)
 end
 
 ---@param streamId number
 ---@param connection any
 function SignContractErrorEvent:readStream(streamId, connection)
-    self.tffKey = streamReadString(streamId)
+    self.contractProposalKey = streamReadString(streamId)
     self.errorType = streamReadUInt8(streamId)
     self:run(connection)
 end
 
 function SignContractErrorEvent:run(_)
-    CallContractors.contractsManager:onContractSignError(self.tffKey, self.errorType)
+    g_contractsManager:onContractSignError(self.contractProposalKey, self.errorType)
 end

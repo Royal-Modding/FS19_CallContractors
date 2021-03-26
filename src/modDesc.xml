@@ -29,9 +29,10 @@ Fr description
 		<sourceFile filename="rmod/Main.lua" />
 		<sourceFile filename="utility/Main.lua" />
 		<sourceFile filename="callContractors.lua" />
-		<sourceFile filename="contractsManager.lua" />
 		<sourceFile filename="playerExtension.lua" />
+		<sourceFile filename="contractsManager/contractsManager.lua" />
 		<sourceFile filename="gui/ccGui.lua" />
+		<sourceFile filename="gui/ccGuiSigningContractsLocker.lua" />
 	</extraSourceFiles>
 
 	<actions>
@@ -113,6 +114,12 @@ Fr description
 		</text>
 		<text name="dialog_cc_cancel_confirm_text">
 			<en>You'll not be refunded of the convening fee.</en>
+		</text>
+		<text name="warning_cc_noFarmlands">
+			<en>There's nothing for you here, buy some land first!</en>
+		</text>
+		<text name="warning_cc_noFarm">
+			<en>There's nothing for you here, join a farm first!</en>
 		</text>
 	</l10n>
 </modDesc> <!--

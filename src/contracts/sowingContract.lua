@@ -9,11 +9,12 @@ SowingContract = {}
 SowingContract_mt = Class(SowingContract, Contract)
 
 --- SowingContract class
+---@param contractType ContractType
 ---@param mt? table custom meta table
 ---@return SowingContract
-function SowingContract.new(mt)
+function SowingContract.new(contractType, mt)
     ---@type SowingContract
-    local self = Contract.new(mt or SowingContract_mt)
+    local self = Contract.new(contractType, mt or SowingContract_mt)
     return self
 end
 

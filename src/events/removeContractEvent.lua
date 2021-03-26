@@ -18,14 +18,14 @@ function RemoveContractEvent:emptyNew()
     return e
 end
 
----@param contractId number
+---@param signedContractId number
 ---@param reason number
 ---@return RemoveContractEvent
-function RemoveContractEvent:new(contractId, reason)
+function RemoveContractEvent:new(signedContractId, reason)
     ---@type RemoveContractEvent
     local e = RemoveContractEvent:emptyNew()
     ---@type number
-    e.contractId = contractId
+    e.contractId = signedContractId
     e.reason = reason
     return e
 end
@@ -44,16 +44,15 @@ function RemoveContractEvent:readStream(streamId, connection)
     self:run(connection)
 end
 
----@param connection any
-function RemoveContractEvent:run(connection)
-    CallContractors.contractsManager:onContractRemoved(self.contractId, self.reason)
+function RemoveContractEvent:run(_)
+    g_contractsManager:onContractRemoved(self.contractId, self.reason)
 end
 
----@param contractId number
+---@param signedContractId number
 ---@param reason number
-function RemoveContractEvent.sendEvent(contractId, reason)
+function RemoveContractEvent.sendEvent(signedContractId, reason)
     if g_server ~= nil then
-        g_server:broadcastEvent(RemoveContractEvent:new(contractId, reason), true)
+        g_server:broadcastEvent(RemoveContractEvent:new(signedContractId, reason), true)
     else
         g_debugManager:devError("[%s] RemoveContractEvent can only be sent from server", CallContractors.name)
     end

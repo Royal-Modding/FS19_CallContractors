@@ -9,25 +9,25 @@ PlowingContract = {}
 PlowingContract_mt = Class(PlowingContract, Contract)
 
 --- PlowingContract class
+---@param contractType ContractType
 ---@param mt? table custom meta table
 ---@return PlowingContract
-function PlowingContract.new(mt)
+function PlowingContract.new(contractType, mt)
     ---@type PlowingContract
-    local self = Contract.new(mt or PlowingContract_mt)
+    local self = Contract.new(contractType, mt or PlowingContract_mt)
     return self
 end
 
----@param field any
----@param fruit any
+---@param farmId number
+---@param fieldId number
+---@param fruitId number
 ---@return boolean
-function PlowingContract.canBePerformed(field, fruit)
+function PlowingContract.checkPrerequisites(farmId, fieldId, fruitId)
     return true
 end
 
----@param field any
----@param fruit any
----@param otherContractProposals Contract[]
-function PlowingContract:randomizeData(field, fruit, otherContractProposals)
+---@param otherContractProposals ContractProposal[]
+function PlowingContract:randomize(otherContractProposals)
     local economicDifficulty = g_currentMission.missionInfo.economicDifficulty
 
     local minWaitTime = 2
@@ -46,16 +46,16 @@ function PlowingContract:randomizeData(field, fruit, otherContractProposals)
     local priceMultiplier = MathUtil.lerp(1, basePriceMultiplier, 0.1) -- priceMultiplier is 10% of basePriceMultiplier
 
     self.callPrice = callPrice * basePriceMultiplier
-    self.workPrice = pricePerHa * field.fieldArea * priceMultiplier
+    self.workPrice = pricePerHa * self:getField().fieldArea * priceMultiplier
 
-    -- prevents multiple contracts a single npc
+    -- prevents multiple contracts from a single npc
     repeat
         self.npc = g_npcManager:getRandomNPC()
     until (TableUtility.f_count(
         otherContractProposals,
-        ---@type Contract
-        function(c)
-            return c.npc.imageFilename == self.npc.imageFilename
+        ---@type ContractProposal
+        function(cp)
+            return cp.contract.npc.imageFilename == self.npc.imageFilename
         end
     ) == 0)
 end

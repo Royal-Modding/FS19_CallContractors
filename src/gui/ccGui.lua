@@ -355,7 +355,7 @@ function CCGui:onRemoveSigningContractDCB(key, errorType)
         self:refreshList()
     end
 
-    if errorType == SignContractErrorEvent.ERROR_TYPES.CANNOT_BE_PERFORMED then
+    if errorType == SignContractErrorEvent.ERROR_TYPES.PREREQUISITES_NO_LONGER_MET then
         g_gui:showInfoDialog({text = g_i18n:getText("dialog_cc_cannot_be_performed")})
     end
 

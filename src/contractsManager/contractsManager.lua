@@ -28,14 +28,21 @@ function ContractsManager:load()
     ---@type SignedContract[]
     self.signedContracts = {}
 
+    ---@type integer
     self.nextSignedContractId = 0
 
+    ---@type table<table, string>[]
     self.eventListeners = {}
     for _, eventId in pairs(self.EVENT_TYPES) do
         self.eventListeners[eventId] = {}
     end
 
     self.isServer = g_server ~= nil
+
+    if self.isServer then
+        g_farmlandManager:addStateChangeListener(self)
+        g_messageCenter:subscribe(MessageType.FARM_DELETED, self.farmDestroyed, self)
+    end
 
     return self
 end
@@ -112,7 +119,7 @@ function ContractsManager:signContract(contractProposal)
     if self.isServer then
         local contract = contractProposal.contract
         if not contract:hasPrerequisites() then
-            return false, SignContractErrorEvent.ERROR_TYPES.CANNOT_BE_PERFORMED
+            return false, SignContractErrorEvent.ERROR_TYPES.PREREQUISITES_NO_LONGER_MET
         end
 
         local signedContractKey = contract.contractType:getSignedContractKeyByContract(contract)
@@ -161,9 +168,36 @@ function ContractsManager:onContractRemoved(signedContractId, reason)
 
     if reason == RemoveContractEvent.REASONS.CANCELLED_BY_CONTRACTOR then
         if signedContract.contract.farmId == g_currentMission:getFarmId() and g_dedicatedServerInfo == nil then
-            -- show info dialog
             g_gui:showInfoDialog({text = g_i18n:getText("dialog_cc_contract_cancelled_by_contractor"):format(signedContract.contract.npc.title)})
-            g_currentMission:addMoney(signedContract.contract.callPrice * 2, signedContract.contract.farmId, g_callContractors.moneyType, true, true)
+        end
+    end
+
+    if reason == RemoveContractEvent.REASONS.PREREQUISITES_NO_LONGER_MET then
+        if signedContract.contract.farmId == g_currentMission:getFarmId() and g_dedicatedServerInfo == nil then
+            g_gui:showInfoDialog({text = g_i18n:getText("dialog_cc_contract_prerequisites_no_longer_met"):format(signedContract.contract.npc.title)})
+        end
+    end
+end
+
+---@param farmlandId integer
+---@param farmId integer
+function ContractsManager:onFarmlandStateChanged(farmlandId, farmId)
+    if farmId == FarmlandManager.NO_OWNER_FARM_ID then
+        for _, signedContract in pairs(self.signedContracts) do
+            if signedContract.contract.contractType.requireFieldParam then
+                if signedContract.contract:getField().farmland.id == farmlandId then
+                    RemoveContractEvent.sendEvent(signedContract.id, RemoveContractEvent.REASONS.FARMLAND_SOLD)
+                end
+            end
+        end
+    end
+end
+
+---@param farmId integer
+function ContractsManager:farmDestroyed(farmId)
+    for _, signedContract in pairs(self.signedContracts) do
+        if signedContract.contract.farmId == farmId then
+            RemoveContractEvent.sendEvent(signedContract.id, RemoveContractEvent.REASONS.FARM_DESTROYED)
         end
     end
 end
@@ -199,10 +233,24 @@ function ContractsManager:update(dt)
     for _, signedContract in pairs(self.signedContracts) do
         -- cancel one contract every ~15 (calculated on an avarage contract wait time of 23h)
         if math.random(1, math.ceil(77550000 / g_currentMission.missionInfo.timeScale)) == 500 then
+            -- refund twice the amount of the deposit
+            g_currentMission:addMoney(signedContract.contract.callPrice * 2, signedContract.contract.farmId, g_callContractors.moneyType, true, true)
             RemoveContractEvent.sendEvent(signedContract.id, RemoveContractEvent.REASONS.CANCELLED_BY_CONTRACTOR)
         else
             signedContract.ttl = math.max(signedContract.ttl - scaledDt, 0)
             if self.isServer and signedContract.ttl <= 0 then
+                -- check if prerequisites are still met
+                if signedContract.contract:hasPrerequisites() then
+                    -- run the contract
+                    if signedContract.contract:run() then
+                        g_currentMission:addMoney(-(signedContract.contract.workPrice), signedContract.contract.farmId, g_callContractors.moneyType, true, true)
+                        RemoveContractEvent.sendEvent(signedContract.id, RemoveContractEvent.REASONS.COMPLETED)
+                    else
+                        RemoveContractEvent.sendEvent(signedContract.id, RemoveContractEvent.REASONS.RUN_FAILED)
+                    end
+                else
+                    RemoveContractEvent.sendEvent(signedContract.id, RemoveContractEvent.REASONS.PREREQUISITES_NO_LONGER_MET)
+                end
             end
         end
     end

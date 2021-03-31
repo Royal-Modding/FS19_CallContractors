@@ -106,3 +106,8 @@ function Contract:readFromStream(streamId)
     self.callPrice = streamReadFloat32(streamId)
     self.workPrice = streamReadFloat32(streamId)
 end
+
+---@return boolean runResult
+function Contract:run()
+    return true
+end

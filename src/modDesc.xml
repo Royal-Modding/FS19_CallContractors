@@ -127,5 +127,8 @@ Fr description
 		<text name="dialog_cc_contract_cancelled_by_contractor">
 			<en>The contractor %s had an unexpected issue and therefore will not be able to fulfill the signed contract. He apologized and refunded you twice the amount of the deposit you paid.</en>
 		</text>
+		<text name="dialog_cc_contract_prerequisites_no_longer_met">
+			<en>Something may have changed since the contract sign and the contractor %s can no longer perform the job.</en>
+		</text>
 	</l10n>
 </modDesc>

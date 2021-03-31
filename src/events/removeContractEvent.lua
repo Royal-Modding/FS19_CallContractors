@@ -9,6 +9,11 @@ RemoveContractEvent = {}
 RemoveContractEvent.REASONS = {}
 RemoveContractEvent.REASONS.CANCELLED = 1
 RemoveContractEvent.REASONS.CANCELLED_BY_CONTRACTOR = 2
+RemoveContractEvent.REASONS.PREREQUISITES_NO_LONGER_MET = 3
+RemoveContractEvent.REASONS.RUN_FAILED = 4
+RemoveContractEvent.REASONS.COMPLETED = 5
+RemoveContractEvent.REASONS.FARMLAND_SOLD = 6
+RemoveContractEvent.REASONS.FARM_DESTROYED = 7
 RemoveContractEvent_mt = Class(RemoveContractEvent, Event)
 
 InitEventClass(RemoveContractEvent, "RemoveContractEvent")
@@ -19,8 +24,8 @@ function RemoveContractEvent:emptyNew()
     return e
 end
 
----@param signedContractId number
----@param reason number
+---@param signedContractId integer
+---@param reason integer
 ---@return RemoveContractEvent
 function RemoveContractEvent:new(signedContractId, reason)
     ---@type RemoveContractEvent

@@ -4,7 +4,7 @@
 ---@version r_version_r
 ---@date 23/03/2021
 
----@class SignContractErrorEvent
+---@class SignContractErrorEvent : Event
 SignContractErrorEvent = {}
 SignContractErrorEvent.ERROR_TYPES = {}
 SignContractErrorEvent.ERROR_TYPES.TEST = 1

@@ -4,7 +4,7 @@
 ---@version r_version_r
 ---@date 23/03/2021
 
----@class SignContractEvent
+---@class SignContractEvent : Event
 SignContractEvent = {}
 SignContractEvent_mt = Class(SignContractEvent, Event)
 

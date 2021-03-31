@@ -6,7 +6,12 @@
 
 PlayerExtension = {}
 
-function PlayerExtension:new(superFunc, isServer, isClient)
+---@param self Player
+---@param superFunc function
+---@param isServer boolean
+---@param isClient boolean
+---@return Player
+function PlayerExtension.new(self, superFunc, isServer, isClient)
     self = superFunc(nil, isServer, isClient)
     self.inputInformation.registrationList[InputAction.CALL_CONTRACTORS_SHOW] = {
         eventId = "",

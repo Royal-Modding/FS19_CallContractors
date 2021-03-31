@@ -4,10 +4,9 @@
 ---@version r_version_r
 ---@date 18/03/2021
 
----@class CCGui
+---@class CCGui : Class
 ---@field onClickBack function
 ---@field registerControls function
----@field superClass function
 ---@field ccProposalItemTemplate any
 ---@field ccContractItemTemplate any
 ---@field ccList any
@@ -23,7 +22,7 @@ CCGui.CONTROLS = {"ccProposalItemTemplate", "ccContractItemTemplate", "ccList", 
 
 local CCGui_mt = Class(CCGui, ScreenElement)
 
----@param target any
+---@param target table
 ---@return CCGui
 function CCGui:new(target)
     ---@type CCGui
@@ -55,6 +54,9 @@ function CCGui:new(target)
 
     ---@type CCGuiSigningContractsLocker
     o.locker = CCGuiSigningContractsLocker:new()
+
+    o.slowUpdateTimer = 0
+    o.slowUpdateEvery = 3000
 
     o:registerControls(CCGui.CONTROLS)
 
@@ -101,7 +103,8 @@ function CCGui:onOpen()
     g_contractsManager:addEventListener(ContractsManager.EVENT_TYPES.PROPOSAL_EXPIRED, self, "onProposalExpired")
     g_contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_SIGNED, self, "onContractSigned")
     g_contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_SIGN_ERROR, self, "onContractSignError")
-    g_contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_CANCELLED, self, "onContractRemoved")
+    g_contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_CANCELLED, self, "onContractCancelled")
+    g_contractsManager:addEventListener(ContractsManager.EVENT_TYPES.CONTRACT_REMOVED, self, "onContractRemoved")
 
     -- preload texts to ensure that there's always something to show
     self:updateFieldSelectorTexts(
@@ -238,9 +241,24 @@ function CCGui:updateFruitSelectorTexts(fruits, filter)
     self.selectedFruit = self.fruitsMapping[self.ccFruitSelector:getState()]
 end
 
+---@param dt number
 function CCGui:update(dt)
     CCGui:superClass().update(self, dt)
     self.removeSigningContractDCB:update(dt)
+    self.slowUpdateTimer = self.slowUpdateTimer + dt
+    if self.slowUpdateTimer >= self.slowUpdateEvery then
+        self.slowUpdateTimer = 0
+
+        -- slow update (once every self.slowUpdateEvery)
+        local element = self.ccList:getSelectedElement()
+        if self.ccList:getItemCount() > 0 and element ~= nil then
+            if element.signedContract ~= nil then
+                ---@type SignedContract
+                local signedContract = element.signedContract
+                element.elements[3]:setText(string.format(g_i18n:getText("gui_cc_job_time_text"), math.ceil(signedContract.ttl / 60 / 60 / 1000))) -- ms to hours
+            end
+        end
+    end
 end
 
 function CCGui:onListSelectionChanged()
@@ -347,25 +365,33 @@ function CCGui:onRemoveSigningContractDCB(key, errorType)
 end
 
 ---@param signedContract SignedContract
-function CCGui:onContractRemoved(signedContract)
+---@param reason integer
+function CCGui:onContractRemoved(signedContract, reason)
     if signedContract.key == self.currentSignedContractKey then
         self:refreshList()
     end
 end
 
----@param state number
+---@param signedContract SignedContract
+function CCGui:onContractCancelled(signedContract)
+    if signedContract.key == self.currentSignedContractKey then
+        self:refreshList()
+    end
+end
+
+---@param state integer
 function CCGui:onFieldSelectionChange(state)
     self.selectedField = self.fieldsMapping[state]
     self:refreshList()
 end
 
----@param state number
+---@param state integer
 function CCGui:onFruitSelectionChange(state)
     self.selectedFruit = self.fruitsMapping[state]
     self:refreshList()
 end
 
----@param state number
+---@param state integer
 function CCGui:onJobTypeSelectionChange(state)
     self.selectedContractType = self.contractTypesMapping[state]
     self:onJobTypeSelectionChanged()

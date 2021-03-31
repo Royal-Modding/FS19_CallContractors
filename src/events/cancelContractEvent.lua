@@ -4,7 +4,7 @@
 ---@version r_version_r
 ---@date 24/03/2021
 
----@class CancelContractEvent
+---@class CancelContractEvent : Event
 CancelContractEvent = {}
 CancelContractEvent_mt = Class(CancelContractEvent, Event)
 

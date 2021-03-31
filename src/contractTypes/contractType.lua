@@ -4,7 +4,7 @@
 ---@version r_version_r
 ---@date 25/03/2021
 
----@class ContractType
+---@class ContractType : Class
 ContractType = {}
 ContractType_mt = Class(ContractType)
 

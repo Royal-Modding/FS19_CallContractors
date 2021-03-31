@@ -4,10 +4,11 @@
 ---@version r_version_r
 ---@date 24/03/2021
 
----@class RemoveContractEvent
+---@class RemoveContractEvent : Event
 RemoveContractEvent = {}
 RemoveContractEvent.REASONS = {}
 RemoveContractEvent.REASONS.CANCELLED = 1
+RemoveContractEvent.REASONS.CANCELLED_BY_CONTRACTOR = 2
 RemoveContractEvent_mt = Class(RemoveContractEvent, Event)
 
 InitEventClass(RemoveContractEvent, "RemoveContractEvent")
@@ -24,19 +25,19 @@ end
 function RemoveContractEvent:new(signedContractId, reason)
     ---@type RemoveContractEvent
     local e = RemoveContractEvent:emptyNew()
-    ---@type number
+    ---@type integer
     e.contractId = signedContractId
     e.reason = reason
     return e
 end
 
----@param streamId number
+---@param streamId integer
 function RemoveContractEvent:writeStream(streamId, _)
     streamWriteUInt16(streamId, self.contractId)
     streamWriteUInt8(streamId, self.reason)
 end
 
----@param streamId number
+---@param streamId integer
 ---@param connection Connection
 function RemoveContractEvent:readStream(streamId, connection)
     self.contractId = streamReadUInt16(streamId)
@@ -48,8 +49,8 @@ function RemoveContractEvent:run(_)
     g_contractsManager:onContractRemoved(self.contractId, self.reason)
 end
 
----@param signedContractId number
----@param reason number
+---@param signedContractId integer
+---@param reason integer
 function RemoveContractEvent.sendEvent(signedContractId, reason)
     if g_server ~= nil then
         g_server:broadcastEvent(RemoveContractEvent:new(signedContractId, reason), true)

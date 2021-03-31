@@ -18,6 +18,7 @@ ContractsManager.EVENT_TYPES.PROPOSAL_EXPIRED = 1
 ContractsManager.EVENT_TYPES.CONTRACT_SIGNED = 2
 ContractsManager.EVENT_TYPES.CONTRACT_SIGN_ERROR = 3
 ContractsManager.EVENT_TYPES.CONTRACT_CANCELLED = 4
+ContractsManager.EVENT_TYPES.CONTRACT_REMOVED = 5
 
 ---@return ContractsManager
 function ContractsManager:load()
@@ -119,7 +120,7 @@ function ContractsManager:signContract(contractProposal)
             return false, SignContractErrorEvent.ERROR_TYPES.ALREADY_ACTIVE
         end
 
-        g_currentMission:addMoney(contract.callPrice, contract.farmId, g_callContractors.moneyType, true, true)
+        g_currentMission:addMoney(-(contract.callPrice), contract.farmId, g_callContractors.moneyType, true, true)
 
         local signedContract = SignedContract.new(signedContractKey, contract)
         signedContract.id = self:getNextSignedContractId()
@@ -148,10 +149,22 @@ end
 ---@param reason integer
 function ContractsManager:onContractRemoved(signedContractId, reason)
     g_logManager:devInfo("[%s] onContractRemoved(contractId: %s, reason: %s)", CallContractors.name, signedContractId, TableUtility.indexOf(RemoveContractEvent.REASONS, reason))
+
     local signedContract = self:getSignedContractById(signedContractId)
     self.signedContracts[signedContract.key] = nil
+
     if reason == RemoveContractEvent.REASONS.CANCELLED then
         self:callEventListeners(self.EVENT_TYPES.CONTRACT_CANCELLED, signedContract)
+    else
+        self:callEventListeners(self.EVENT_TYPES.CONTRACT_REMOVED, signedContract, reason)
+    end
+
+    if reason == RemoveContractEvent.REASONS.CANCELLED_BY_CONTRACTOR then
+        if signedContract.contract.farmId == g_currentMission:getFarmId() and g_dedicatedServerInfo == nil then
+            -- show info dialog
+            g_gui:showInfoDialog({text = g_i18n:getText("dialog_cc_contract_cancelled_by_contractor"):format(signedContract.contract.npc.title)})
+            g_currentMission:addMoney(signedContract.contract.callPrice * 2, signedContract.contract.farmId, g_callContractors.moneyType, true, true)
+        end
     end
 end
 
@@ -184,8 +197,13 @@ function ContractsManager:update(dt)
     -- update signed contracts ttl
     ---@type SignedContract
     for _, signedContract in pairs(self.signedContracts) do
-        signedContract.ttl = math.max(signedContract.ttl - scaledDt, 0)
-        if self.isServer and signedContract.ttl <= 0 then
+        -- cancel one contract every ~15 (calculated on an avarage contract wait time of 23h)
+        if math.random(1, math.ceil(77550000 / g_currentMission.missionInfo.timeScale)) == 500 then
+            RemoveContractEvent.sendEvent(signedContract.id, RemoveContractEvent.REASONS.CANCELLED_BY_CONTRACTOR)
+        else
+            signedContract.ttl = math.max(signedContract.ttl - scaledDt, 0)
+            if self.isServer and signedContract.ttl <= 0 then
+            end
         end
     end
 end

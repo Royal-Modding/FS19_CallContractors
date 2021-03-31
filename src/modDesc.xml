@@ -124,5 +124,8 @@ Fr description
 		<text name="finance_cc_contractorsPayment">
 			<en>Contractors Payment</en>
 		</text>
+		<text name="dialog_cc_contract_cancelled_by_contractor">
+			<en>The contractor %s had an unexpected issue and therefore will not be able to fulfill the signed contract. He apologized and refunded you twice the amount of the deposit you paid.</en>
+		</text>
 	</l10n>
 </modDesc>

@@ -33,7 +33,7 @@ function ContractType:getContractInstance()
     return self.contractClass.new(self)
 end
 
----@param farmId number
+---@param farmId integer
 ---@return boolean
 function ContractType.checkPrerequisites(farmId)
     -- needs at least one field
@@ -45,24 +45,24 @@ function ContractType.checkPrerequisites(farmId)
     ) > 0
 end
 
----@param farmId number
----@param field table
+---@param farmId integer
+---@param field Field
 ---@return boolean
 function ContractType.fieldsFilter(farmId, field)
     -- only owned fields
     return g_farmlandManager:getFarmlandOwner(field.farmland.id) == farmId
 end
 
----@param farmId number
----@param fruit any
+---@param farmId integer
+---@param fruit FruitTypeEntry
 ---@return boolean
 function ContractType.fruitsFilter(farmId, fruit)
     return true
 end
 
----@param farmId number
----@param fieldId number
----@param fruitId number
+---@param farmId integer
+---@param fieldId integer
+---@param fruitId integer
 ---@return string
 function ContractType:getContractProposalKey(farmId, fieldId, fruitId)
     local contractProposalKey = string.format("%s_%d", self.name, farmId)
@@ -75,9 +75,9 @@ function ContractType:getContractProposalKey(farmId, fieldId, fruitId)
     return contractProposalKey
 end
 
----@param farmId number
----@param fieldId number
----@param fruitId number
+---@param farmId integer
+---@param fieldId integer
+---@param fruitId integer
 ---@return string
 function ContractType:getSignedContractKey(farmId, fieldId, fruitId)
     -- signed contract keys doesn't need to take into account the fruitId and contract type cause only one contract per field is allowed, regardless of fruit and contract type

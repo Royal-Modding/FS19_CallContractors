@@ -155,7 +155,7 @@ function CCGui:refreshList()
             contractProposals,
             ---@param a ContractProposal
             ---@param b ContractProposal
-            ---@return bool
+            ---@return boolean
             function(a, b)
                 return a.contract.waitTime < b.contract.waitTime
             end

@@ -32,7 +32,7 @@ function CancelContractEvent:writeStream(streamId, _)
 end
 
 ---@param streamId number
----@param connection any
+---@param connection Connection
 function CancelContractEvent:readStream(streamId, connection)
     self.signedContractId = streamReadUInt16(streamId)
     self:run(connection)

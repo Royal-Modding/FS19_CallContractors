@@ -17,9 +17,3 @@ function SowingContract.new(contractType, mt)
     local self = Contract.new(contractType, mt or SowingContract_mt)
     return self
 end
-
----@param fruit any
----@return boolean
-function SowingContract.fruitsFilter(fruit)
-    return fruit.index ~= FruitType.WEED and fruit.index ~= FruitType.POPLAR and fruit.index ~= FruitType.DRYGRASS
-end

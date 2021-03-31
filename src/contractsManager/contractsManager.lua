@@ -40,9 +40,9 @@ function ContractsManager:load()
 end
 
 ---@param contractType ContractType
----@param farmId number
----@param fieldId number
----@param fruitId number
+---@param farmId integer
+---@param fieldId integer
+---@param fruitId integer
 ---@return ContractProposal[]
 function ContractsManager:getProposals(contractType, farmId, fieldId, fruitId)
     local contractProposalKey = contractType:getContractProposalKey(farmId, fieldId, fruitId)
@@ -67,13 +67,13 @@ function ContractsManager:getProposals(contractType, farmId, fieldId, fruitId)
     return {}
 end
 
----@return number
+---@return integer
 function ContractsManager:getNextSignedContractId()
     self.nextSignedContractId = self.nextSignedContractId + 1
     return self.nextSignedContractId
 end
 
----@param signedContractId number
+---@param signedContractId integer
 ---@return SignedContract
 function ContractsManager:getSignedContractById(signedContractId)
     return TableUtility.f_find(
@@ -106,7 +106,7 @@ end
 
 ---@param contractProposal ContractProposal
 ---@return boolean
----@return number | SignedContract errorOrSignedContract
+---@return integer | SignedContract errorOrSignedContract
 function ContractsManager:signContract(contractProposal)
     if self.isServer then
         local contract = contractProposal.contract
@@ -119,7 +119,8 @@ function ContractsManager:signContract(contractProposal)
             return false, SignContractErrorEvent.ERROR_TYPES.ALREADY_ACTIVE
         end
 
-        -- TODO: remove money and try to ensure the right money message in MP
+        g_currentMission:addMoney(contract.callPrice, contract.farmId, g_callContractors.moneyType, true, true)
+
         local signedContract = SignedContract.new(signedContractKey, contract)
         signedContract.id = self:getNextSignedContractId()
 
@@ -137,14 +138,14 @@ function ContractsManager:onContractSigned(signedContract)
 end
 
 ---@param contractProposalKey string
----@param errorType number
+---@param errorType integer
 function ContractsManager:onContractSignError(contractProposalKey, errorType)
     g_logManager:devError("[%s] onContractSignError(contractProposalKey: %s, errorType: %s)", CallContractors.name, contractProposalKey, TableUtility.indexOf(SignContractErrorEvent.ERROR_TYPES, errorType))
     self:callEventListeners(self.EVENT_TYPES.CONTRACT_SIGN_ERROR, contractProposalKey, errorType)
 end
 
----@param signedContractId number
----@param reason number
+---@param signedContractId integer
+---@param reason integer
 function ContractsManager:onContractRemoved(signedContractId, reason)
     g_logManager:devInfo("[%s] onContractRemoved(contractId: %s, reason: %s)", CallContractors.name, signedContractId, TableUtility.indexOf(RemoveContractEvent.REASONS, reason))
     local signedContract = self:getSignedContractById(signedContractId)
@@ -163,9 +164,8 @@ function ContractsManager:update(dt)
         local removedCount =
             ArrayUtility.remove(
             batch:getContractProposals(),
-            ---comment
             ---@param array ContractProposal[]
-            ---@param index number
+            ---@param index integer
             ---@return boolean
             function(array, index, _)
                 local proposal = array[index]
@@ -180,10 +180,18 @@ function ContractsManager:update(dt)
             self:callEventListeners(self.EVENT_TYPES.PROPOSAL_EXPIRED, batch.contractProposalKey)
         end
     end
+
+    -- update signed contracts ttl
+    ---@type SignedContract
+    for _, signedContract in pairs(self.signedContracts) do
+        signedContract.ttl = math.max(signedContract.ttl - scaledDt, 0)
+        if self.isServer and signedContract.ttl <= 0 then
+        end
+    end
 end
 
----@param eventType number
----@param object any
+---@param eventType integer
+---@param object table
 ---@param callback string
 function ContractsManager:addEventListener(eventType, object, callback)
     if self.eventListeners[eventType] ~= nil then
@@ -191,14 +199,15 @@ function ContractsManager:addEventListener(eventType, object, callback)
     end
 end
 
----@param object any
+---@param object table
 function ContractsManager:removeEventListeners(object)
     for _, typedListeners in pairs(self.eventListeners) do
         typedListeners[object] = nil
     end
 end
 
----@param eventType number
+---@param eventType integer
+---@vararg any
 function ContractsManager:callEventListeners(eventType, ...)
     if self.eventListeners[eventType] ~= nil then
         for callObject, callFunction in pairs(self.eventListeners[eventType]) do

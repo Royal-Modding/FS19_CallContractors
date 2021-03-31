@@ -18,12 +18,13 @@ function PlowingContract.new(contractType, mt)
     return self
 end
 
----@param farmId number
----@param fieldId number
----@param fruitId number
+---@param farmId integer
+---@param fieldId integer
+---@param fruitId integer
 ---@return boolean
 function PlowingContract.checkPrerequisites(farmId, fieldId, fruitId)
-    return true
+    local field = g_fieldManager:getFieldByIndex(fieldId)
+    return g_farmlandManager:getFarmlandOwner(field.farmland.id) == farmId
 end
 
 ---@param otherContractProposals ContractProposal[]
@@ -55,7 +56,7 @@ function PlowingContract:randomize(otherContractProposals)
         otherContractProposals,
         ---@type ContractProposal
         function(cp)
-            return cp.contract.npc.imageFilename == self.npc.imageFilename
+            return cp.contract.npc == self.npc
         end
     ) == 0)
 end

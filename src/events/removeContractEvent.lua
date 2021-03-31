@@ -37,7 +37,7 @@ function RemoveContractEvent:writeStream(streamId, _)
 end
 
 ---@param streamId number
----@param connection any
+---@param connection Connection
 function RemoveContractEvent:readStream(streamId, connection)
     self.contractId = streamReadUInt16(streamId)
     self.reason = streamReadUInt8(streamId)

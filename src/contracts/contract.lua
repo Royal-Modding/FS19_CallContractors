@@ -19,13 +19,13 @@ function Contract.new(contractType, mt)
     ---@type ContractType
     self.contractType = contractType
 
-    ---@type number
+    ---@type integer
     self.farmId = 0
 
-    ---@type number
+    ---@type integer
     self.fieldId = 0
 
-    ---@type number
+    ---@type integer
     self.fruitId = 0
 
     ---@type number
@@ -37,15 +37,15 @@ function Contract.new(contractType, mt)
     ---@type number
     self.waitTime = 24 -- hours
 
-    ---@type NPC
+    ---@type NPCEntry
     self.npc = nil
 
     return self
 end
 
----@param farmId number
----@param fieldId number
----@param fruitId number
+---@param farmId integer
+---@param fieldId integer
+---@param fruitId integer
 ---@return boolean
 function Contract.checkPrerequisites(farmId, fieldId, fruitId)
     return false
@@ -56,9 +56,9 @@ function Contract:hasPrerequisites()
     return self.checkPrerequisites(self.farmId, self.fieldId, self.fruitId)
 end
 
----@param farmId number
----@param fieldId number
----@param fruitId number
+---@param farmId integer
+---@param fieldId integer
+---@param fruitId integer
 function Contract:load(farmId, fieldId, fruitId)
     self.farmId = farmId
     self.fieldId = fieldId
@@ -69,18 +69,22 @@ end
 function Contract:randomize(otherContractProposals)
 end
 
+---@return Field
 function Contract:getField()
     return g_fieldManager:getFieldByIndex(self.fieldId)
 end
 
+---@return FruitTypeEntry
 function Contract:getFruit()
     return g_fruitTypeManager:getFruitTypeByIndex(self.fruitId)
 end
 
+---@return Farm
 function Contract:getFarm()
     return g_farmManager:getFarmById(self.farmId)
 end
 
+---@param streamId integer
 function Contract:writeToStream(streamId)
     streamWriteUInt8(streamId, self.fruitId)
     streamWriteUInt8(streamId, self.farmId)
@@ -91,6 +95,7 @@ function Contract:writeToStream(streamId)
     streamWriteFloat32(streamId, self.workPrice)
 end
 
+---@param streamId integer
 function Contract:readFromStream(streamId)
     self.fruitId = streamReadUInt8(streamId)
     self.farmId = streamReadUInt8(streamId)

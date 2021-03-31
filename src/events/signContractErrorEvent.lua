@@ -40,7 +40,7 @@ function SignContractErrorEvent:writeStream(streamId, _)
 end
 
 ---@param streamId number
----@param connection any
+---@param connection Connection
 function SignContractErrorEvent:readStream(streamId, connection)
     self.contractProposalKey = streamReadString(streamId)
     self.errorType = streamReadUInt8(streamId)

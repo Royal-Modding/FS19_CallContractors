@@ -26,7 +26,7 @@ function ContractProposalsBatch.new(contractProposalKey, mt)
     return self
 end
 
----@return number
+---@return integer
 function ContractProposalsBatch:getMaxContractProposals()
     return self.maxContractProposals
 end

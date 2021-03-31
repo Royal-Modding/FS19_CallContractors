@@ -34,7 +34,7 @@ function SignContractEvent:writeStream(streamId, _)
 end
 
 ---@param streamId number
----@param connection any
+---@param connection Connection
 function SignContractEvent:readStream(streamId, connection)
     local pKey = streamReadString(streamId)
     local contractTypeId = streamReadUInt8(streamId)
@@ -46,7 +46,7 @@ function SignContractEvent:readStream(streamId, connection)
     self:run(connection)
 end
 
----@param connection any
+---@param connection Connection
 function SignContractEvent:run(connection)
     if g_server ~= nil then
         local success, errorOrSignedContract = g_contractsManager:signContract(self.contractProposal)

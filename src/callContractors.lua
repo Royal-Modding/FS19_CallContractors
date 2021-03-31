@@ -24,6 +24,8 @@ function CallContractors:initialize()
         Player.showCallContractorsActionEvent = PlayerExtension.showCallContractorsActionEvent
     end
 
+    self.moneyType = MoneyType.getMoneyType("wagePayment", "finance_cc_contractorsPayment")
+
     source(Utils.getFilename("contractTypes/contractType.lua", self.directory))
     source(Utils.getFilename("contractTypes/sowingContractType.lua", self.directory))
 
@@ -140,7 +142,7 @@ end
 
 function CallContractors:openGui()
     if not self.gui.target:getIsOpen() then
-        if g_currentMission.player.farmId ~= 0 then
+        if g_currentMission:getFarmId() ~= 0 then
             if self.gui.target:onPreOpen(g_currentMission.player.farmId) > 0 then
                 g_gui:showGui(self.gui.name)
             else

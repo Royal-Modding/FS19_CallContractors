@@ -23,8 +23,8 @@ function SowingContractType.new(id, contractClass, name, title, mt)
     return self
 end
 
----@param farmId number
----@param fruit any
+---@param farmId integer
+---@param fruit FruitTypeEntry
 ---@return boolean
 function SowingContractType.fruitsFilter(farmId, fruit)
     return fruit.index ~= FruitType.WEED and fruit.index ~= FruitType.POPLAR and fruit.index ~= FruitType.DRYGRASS

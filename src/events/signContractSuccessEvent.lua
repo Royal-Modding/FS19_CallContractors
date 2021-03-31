@@ -36,7 +36,7 @@ function SignContractSuccessEvent:writeStream(streamId, _)
 end
 
 ---@param streamId number
----@param connection any
+---@param connection Connection
 function SignContractSuccessEvent:readStream(streamId, connection)
     local sKey = streamReadString(streamId)
     local contractTypeId = streamReadUInt8(streamId)

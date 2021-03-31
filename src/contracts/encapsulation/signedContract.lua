@@ -23,7 +23,7 @@ function SignedContract.new(key, contract, mt)
     ---@type Contract
     self.contract = contract
 
-    ---@type number
+    ---@type integer
     self.id = 0
 
     ---@type number

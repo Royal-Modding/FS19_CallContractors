@@ -56,7 +56,7 @@ function SignContractEvent:run(connection)
             connection:sendEvent(SignContractErrorEvent:new(self.contractProposal, errorOrSignedContract))
         end
     else
-        g_debugManager:devError("[%s] SignContractEvent can only run server-side", CallContractors.name)
+        g_debugManager:devError("[%s] SignContractEvent can only run server-side", g_callContractors.name)
     end
 end
 

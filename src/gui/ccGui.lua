@@ -74,7 +74,7 @@ function CCGui:onCreate()
     self.ccContractItemTemplate:unlinkElement()
     self.ccContractItemTemplate:setVisible(false)
 
-    self.ccContractSigningImageBg.elements[1]:setImageFilename(Utils.getFilename("img/cs_icon.dds", CallContractors.guiDirectory))
+    self.ccContractSigningImageBg.elements[1]:setImageFilename(Utils.getFilename("img/cs_icon.dds", g_callContractors.guiDirectory))
 end
 
 ---@param farmId number

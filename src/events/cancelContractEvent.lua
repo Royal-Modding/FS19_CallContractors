@@ -43,10 +43,10 @@ function CancelContractEvent:run(_)
         if g_contractsManager:getSignedContractById(self.signedContractId) ~= nil then
             RemoveContractEvent.sendEvent(self.signedContractId, RemoveContractEvent.REASONS.CANCELLED)
         else
-            g_debugManager:devError("[%s] Can't find contract with id = %d", CallContractors.name, self.signedContractId)
+            g_debugManager:devError("[%s] Can't find contract with id = %d", g_callContractors.name, self.signedContractId)
         end
     else
-        g_debugManager:devError("[%s] CancelContractEvent can only run server-side", CallContractors.name)
+        g_debugManager:devError("[%s] CancelContractEvent can only run server-side", g_callContractors.name)
     end
 end
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+    <texts>
+        <text name="input_CALL_CONTRACTORS_SHOW"                    text="Visualizza menu chiama terzista (Call Contractors)" />
+        <text name="cc_job_type_cultivating"                        text="Coltivazione" />
+        <text name="cc_job_type_plowing"                            text="Aratura" />
+        <text name="cc_job_type_sowing"                             text="Semina" />
+        <text name="cc_job_type_selling_goods"                      text="Vendita" />
+        <text name="gui_cc_container_title"                         text="Call Contractors" />
+        <text name="gui_cc_field_selector_title"                    text="Campo" />
+        <text name="gui_cc_fruit_selector_title"                    text="Coltura" />
+        <text name="gui_cc_job_type_selector_title"                 text="Lavoro" />
+        <text name="gui_cc_job_time_text"                           text="Effettuerà il lavoro in %d ore" />
+        <text name="gui_cc_convening_fee_text"                      text="Costo della chiamata:" />
+        <text name="gui_cc_job_chrge_text"                          text="Prezzo del lavoro:" />
+        <text name="gui_cc_payment_amount_text"                     text="Importo da pagare:" />
+        <text name="gui_cc_remaining_payment_text"                  text="Pagamento residuo:" />
+        <text name="gui_cc_sign"                                    text="Accetta" />
+        <text name="dialog_cc_cannot_be_performed"                  text="Contratto cancellato, la proposta non è più valida!" />
+        <text name="dialog_cc_already_active"                       text="Contratto cancellato, pare che qualcuno ha già preso il contratto!" />
+        <text name="dialog_cc_signing_confirm_title"                text="Sei sicuro di accettare il contratto?" />
+        <text name="dialog_cc_signing_confirm_text"                 text="Hai appena pagato %s ed a lavoro completato sarà pagato anche %s ." />
+        <text name="dialog_cc_cancel_confirm_title"                 text="Sei sicuro di voler cancellare questo contratto?" />
+        <text name="dialog_cc_cancel_confirm_text"                  text="Il costo della chiamata non sarà rimborsato." />
+        <text name="warning_cc_noFarmlands"                         text="Qui non c'è niente, dovresti comprare dei campi!" />
+        <text name="warning_cc_noFarm"                              text="Qui non c'è niente, dovresti prima entrare in un'azienda!" />
+        <text name="finance_cc_contractorsPayment"                  text="Pagamento terzisti" />
+        <text name="dialog_cc_contract_cancelled_by_contractor"     text="Il terzista %s ha avuto un imprevisto e non sarà in grado di completare il lavoro. Si scusa e ti ha rimborsato il doppio del prezzo pagato per chiamarlo." />
+        <text name="dialog_cc_contract_prerequisites_no_longer_met" text="Qualcosa è cambiato dopo la firma del contratto ed il terzista %s non può più fare il lavoro." />
+    </texts>
+</l10n>

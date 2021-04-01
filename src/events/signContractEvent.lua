@@ -29,7 +29,7 @@ end
 ---@param streamId number
 function SignContractEvent:writeStream(streamId, _)
     streamWriteString(streamId, self.contractProposal.key)
-    streamWriteUInt8(streamId, self.contractProposal.contract.contractType.id)
+    streamWriteUInt8(streamId, self.contractProposal.contract.type.id)
     self.contractProposal.contract:writeToStream(streamId)
 end
 

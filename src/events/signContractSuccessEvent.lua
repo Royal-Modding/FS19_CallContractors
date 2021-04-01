@@ -29,7 +29,7 @@ end
 ---@param streamId number
 function SignContractSuccessEvent:writeStream(streamId, _)
     streamWriteString(streamId, self.signedContract.key)
-    streamWriteUInt8(streamId, self.signedContract.contract.contractType.id)
+    streamWriteUInt8(streamId, self.signedContract.contract.type.id)
     streamWriteUInt16(streamId, self.signedContract.id)
     streamWriteUIntN(streamId, self.signedContract.ttl, 32)
     self.signedContract.contract:writeToStream(streamId)

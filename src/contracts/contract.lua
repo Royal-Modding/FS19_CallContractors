@@ -9,15 +9,15 @@ Contract = {}
 Contract_mt = Class(Contract)
 
 --- Contract base class
----@param contractType ContractType
+---@param type ContractType
 ---@param mt? table custom meta table
 ---@return Contract
-function Contract.new(contractType, mt)
+function Contract.new(type, mt)
     ---@type Contract
     local self = setmetatable({}, mt or Contract_mt)
 
     ---@type ContractType
-    self.contractType = contractType
+    self.type = type
 
     ---@type integer
     self.farmId = 0
@@ -110,4 +110,24 @@ end
 ---@return boolean runResult
 function Contract:run()
     return true
+end
+
+function Contract:saveToXMLFile(xmlFile, key)
+    setXMLInt(xmlFile, key .. "#npc", self.npc.index)
+    setXMLInt(xmlFile, key .. "#waitTime", self.waitTime)
+    setXMLInt(xmlFile, key .. "#farmId", self.farmId)
+    setXMLInt(xmlFile, key .. "#fieldId", self.fieldId)
+    setXMLInt(xmlFile, key .. "#fruitId", self.fruitId)
+    setXMLFloat(xmlFile, key .. "#callPrice", self.callPrice)
+    setXMLFloat(xmlFile, key .. "#workPrice", self.workPrice)
+end
+
+function Contract:loadFromXMLFile(xmlFile, key)
+    self.npc = g_npcManager:getNPCByIndex(getXMLInt(xmlFile, key .. "#npc")) or g_npcManager:getRandomNPC()
+    self.waitTime = getXMLInt(xmlFile, key .. "#waitTime")
+    self.farmId = getXMLInt(xmlFile, key .. "#farmId")
+    self.fieldId = getXMLInt(xmlFile, key .. "#fieldId")
+    self.fruitId = getXMLInt(xmlFile, key .. "#fruitId")
+    self.callPrice = getXMLFloat(xmlFile, key .. "#callPrice")
+    self.workPrice = getXMLFloat(xmlFile, key .. "#workPrice")
 end

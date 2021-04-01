@@ -146,7 +146,7 @@ function CCGui:refreshList()
         new.elements[2]:setText(contract.npc.title)
         new.elements[3]:setText(string.format(g_i18n:getText("gui_cc_job_time_text"), math.ceil(signedContract.ttl / 60 / 60 / 1000))) -- ms to hours
         new.elements[4]:setText(g_i18n:formatMoney(contract.workPrice))
-        new.elements[7]:setText(contract.contractType.title)
+        new.elements[7]:setText(contract.type.title)
         new:updateAbsolutePosition()
         new.signedContract = signedContract
 

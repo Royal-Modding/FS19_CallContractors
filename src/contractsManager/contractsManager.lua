@@ -122,7 +122,7 @@ function ContractsManager:signContract(contractProposal)
             return false, SignContractErrorEvent.ERROR_TYPES.PREREQUISITES_NO_LONGER_MET
         end
 
-        local signedContractKey = contract.contractType:getSignedContractKeyByContract(contract)
+        local signedContractKey = contract.type:getSignedContractKeyByContract(contract)
         if self.signedContracts[signedContractKey] ~= nil then
             return false, SignContractErrorEvent.ERROR_TYPES.ALREADY_ACTIVE
         end
@@ -184,7 +184,7 @@ end
 function ContractsManager:onFarmlandStateChanged(farmlandId, farmId)
     if farmId == FarmlandManager.NO_OWNER_FARM_ID then
         for _, signedContract in pairs(self.signedContracts) do
-            if signedContract.contract.contractType.requireFieldParam then
+            if signedContract.contract.type.requireFieldParam then
                 if signedContract.contract:getField().farmland.id == farmlandId then
                     RemoveContractEvent.sendEvent(signedContract.id, RemoveContractEvent.REASONS.FARMLAND_SOLD)
                 end
@@ -253,6 +253,34 @@ function ContractsManager:update(dt)
                 end
             end
         end
+    end
+end
+
+---@param xmlFile integer
+---@param baseKey string
+function ContractsManager:onSaveSavegame(xmlFile, baseKey)
+    local i = 0
+    for _, signedContract in pairs(self.signedContracts) do
+        local key = string.format("%s.signedContracts.signedContract(%d)", baseKey, i)
+        signedContract:saveToXMLFile(xmlFile, key)
+        i = i + 1
+    end
+end
+
+---@param xmlFile integer
+---@param baseKey string
+function ContractsManager:onLoadSavegame(xmlFile, baseKey)
+    local i = 0
+    while true do
+        local key = string.format("%s.signedContracts.signedContract(%d)", baseKey, i)
+        if not hasXMLProperty(xmlFile, key) then
+            break
+        end
+        local signedContract = SignedContract.new()
+        signedContract:loadFromXMLFile(xmlFile, key)
+        signedContract.id = self:getNextSignedContractId()
+        self.signedContracts[signedContract.key] = signedContract
+        i = i + 1
     end
 end
 

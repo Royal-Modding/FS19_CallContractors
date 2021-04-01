@@ -17,6 +17,8 @@ function CallContractors:initialize()
     ---@type CallContractors
     g_callContractors = self
 
+    self.savegameFilename = "callContractors.xml"
+
     self.guiDirectory = Utils.getFilename("gui/", self.directory)
 
     Utility.overwrittenFunction(Player, "new", PlayerExtension.new)
@@ -76,6 +78,12 @@ function CallContractors:onPostLoadMap(mapNode, mapFile)
 end
 
 function CallContractors:onLoadSavegame(savegameDirectory, savegameIndex)
+    local savegameFilename = Utils.getFilename(self.savegameFilename, savegameDirectory)
+    if fileExists(savegameFilename) then
+        local xmlFile = loadXMLFile("CallContractorsXml", savegameFilename)
+        self.contractsManager:onLoadSavegame(xmlFile, "callContractors")
+        delete(xmlFile)
+    end
 end
 
 function CallContractors:onPreLoadVehicles(xmlFile, resetVehicles)
@@ -128,6 +136,11 @@ function CallContractors:onPreSaveSavegame(savegameDirectory, savegameIndex)
 end
 
 function CallContractors:onPostSaveSavegame(savegameDirectory, savegameIndex)
+    local savegameFilename = Utils.getFilename(self.savegameFilename, savegameDirectory)
+    local xmlFile = createXMLFile("CallContractorsXml", savegameFilename, "callContractors")
+    self.contractsManager:onSaveSavegame(xmlFile, "callContractors")
+    saveXMLFile(xmlFile)
+    delete(xmlFile)
 end
 
 function CallContractors:onPreDeleteMap()

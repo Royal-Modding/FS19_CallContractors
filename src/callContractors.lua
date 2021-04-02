@@ -48,6 +48,7 @@ function CallContractors:initialize()
     --self.JOB_TYPES[4] = {id = 4, contractClass = SellingGoodsContract, name = "sellingGoods", title = g_i18n:getText("cc_job_type_selling_goods"), requireFieldParam = false, requireFruitParam = true}
 
     self.contractsManager = ContractsManager:load()
+
     ---@type ContractsManager
     g_contractsManager = self.contractsManager
 

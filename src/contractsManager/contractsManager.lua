@@ -10,6 +10,7 @@ source(Utils.getFilename("events/signContractErrorEvent.lua", g_currentModDirect
 source(Utils.getFilename("events/signContractSuccessEvent.lua", g_currentModDirectory))
 source(Utils.getFilename("events/cancelContractEvent.lua", g_currentModDirectory))
 source(Utils.getFilename("events/removeContractEvent.lua", g_currentModDirectory))
+source(Utils.getFilename("events/requestContractsEvent.lua", g_currentModDirectory))
 
 ---@class ContractsManager
 ContractsManager = {}
@@ -42,6 +43,8 @@ function ContractsManager:load()
     if self.isServer then
         g_farmlandManager:addStateChangeListener(self)
         g_messageCenter:subscribe(MessageType.FARM_DELETED, self.farmDestroyed, self)
+    else
+        RequestContractsEvent.sendEvent()
     end
 
     return self
@@ -99,6 +102,11 @@ function ContractsManager:getSignedContractByKey(signedContractKey)
     return self.signedContracts[signedContractKey]
 end
 
+---@return SignedContract[]
+function ContractsManager:getSignedContracts()
+    return self.signedContracts
+end
+
 ---@param contractProposal ContractProposal
 function ContractsManager:requestContractSign(contractProposal)
     -- remove contract from proposals list
@@ -134,7 +142,7 @@ function ContractsManager:signContract(contractProposal)
 
         return true, signedContract
     else
-        g_debugManager:devError("[%s] ContractsManager:signContract can only run server-side", CallContractors.name)
+        g_debugManager:devError("[%s] ContractsManager:signContract can only run server-side", g_callContractors.name)
         return false, SignContractErrorEvent.ERROR_TYPES.NOT_ON_SERVER
     end
 end
@@ -148,14 +156,14 @@ end
 ---@param contractProposalKey string
 ---@param errorType integer
 function ContractsManager:onContractSignError(contractProposalKey, errorType)
-    g_logManager:devError("[%s] onContractSignError(contractProposalKey: %s, errorType: %s)", CallContractors.name, contractProposalKey, TableUtility.indexOf(SignContractErrorEvent.ERROR_TYPES, errorType))
+    g_logManager:devError("[%s] onContractSignError(contractProposalKey: %s, errorType: %s)", g_callContractors.name, contractProposalKey, TableUtility.indexOf(SignContractErrorEvent.ERROR_TYPES, errorType))
     self:callEventListeners(self.EVENT_TYPES.CONTRACT_SIGN_ERROR, contractProposalKey, errorType)
 end
 
 ---@param signedContractId integer
 ---@param reason integer
 function ContractsManager:onContractRemoved(signedContractId, reason)
-    g_logManager:devInfo("[%s] onContractRemoved(contractId: %s, reason: %s)", CallContractors.name, signedContractId, TableUtility.indexOf(RemoveContractEvent.REASONS, reason))
+    g_logManager:devInfo("[%s] onContractRemoved(contractId: %s, reason: %s)", g_callContractors.name, signedContractId, TableUtility.indexOf(RemoveContractEvent.REASONS, reason))
 
     local signedContract = self:getSignedContractById(signedContractId)
     self.signedContracts[signedContract.key] = nil

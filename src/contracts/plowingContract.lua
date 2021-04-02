@@ -34,20 +34,31 @@ function PlowingContract:randomize(otherContractProposals)
     local minWaitTime = 2
     local maxWaitTime = 48
 
-    local minWaitTimePriceMultiplier = 3
+    ---@type RandomInterval[]
+    local waitTimeBatches = {{min = 2, max = 6}, {min = 7, max = 16}, {min = 17, max = 35}, {min = 36, max = 48}}
+
+    local minWaitTimePriceMultiplier = 4
     local maxWaitTimePriceMultiplier = 1
 
     local callPrice = 75 * economicDifficulty
     local pricePerHa = 125 * economicDifficulty
 
-    -- TODO: invece che semplicmente randomizzare tra min e max wait time, creare 3 (o magari 4) "fascie di velocità", randomizzare prima la fascia e poi il tempo interno alla fascia ex. ( 2 >= veloce <= 6 ) ( 6>= medio <= 12 ) ( 12 >= lento <= 48) questo permetterebbe di, più o meno, garantire la varietà dei contratti in base all'esigenza e disponibilità economica
-    self.waitTime = math.random(minWaitTime, maxWaitTime)
+    -- prevents multiple contracts with the same waitTime
+    repeat
+        self.waitTime = Utility.randomFromBatches(waitTimeBatches)
+    until (TableUtility.f_count(
+        otherContractProposals,
+        ---@type ContractProposal
+        function(cp)
+            return cp.contract.waitTime == self.waitTime
+        end
+    ) == 0)
 
-    local basePriceMultiplier = MathUtil.lerp(minWaitTimePriceMultiplier, maxWaitTimePriceMultiplier, Utility.normalize(minWaitTime, self.waitTime, maxWaitTime))
-    local priceMultiplier = MathUtil.lerp(1, basePriceMultiplier, 0.1) -- priceMultiplier is 10% of basePriceMultiplier
+    local callPriceMultiplier = MathUtil.lerp(minWaitTimePriceMultiplier, maxWaitTimePriceMultiplier, Utility.normalize(minWaitTime, self.waitTime, maxWaitTime))
+    local workPriceMultiplier = MathUtil.lerp(maxWaitTimePriceMultiplier, callPriceMultiplier, 0.15) -- workPriceMultiplier is 15% of callPriceMultiplier
 
-    self.callPrice = callPrice * basePriceMultiplier
-    self.workPrice = pricePerHa * self:getField().fieldArea * priceMultiplier
+    self.callPrice = callPrice * callPriceMultiplier
+    self.workPrice = pricePerHa * self:getField().fieldArea * workPriceMultiplier
 
     -- prevents multiple contracts from a single npc
     repeat
@@ -59,4 +70,18 @@ function PlowingContract:randomize(otherContractProposals)
             return cp.contract.npc == self.npc
         end
     ) == 0)
+end
+
+---@return boolean runResult
+function Contract:run()
+    local field = self:getField()
+    if field ~= nil then
+        for _, partition in ipairs(field.maxFieldStatusPartitions) do
+            local sx, sz, wx, wz, hx, hz = Utility.getPPP(partition)
+            FSDensityMapUtil.updatePlowArea(sx, sz, wx, wz, hx, hz, true, true, field.fieldAngle)
+            FSDensityMapUtil.eraseTireTrack(sx, sz, wx, wz, hx, hz)
+        end
+        return true
+    end
+    return false
 end

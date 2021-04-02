@@ -1,10 +1,10 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.0.3.0
+---@version 2.0.5.0
 ---@date 26/02/2021
 
----@alias Array table tables with numeric indexes only, always ordered and sequential
+---@alias Array table<integer, any> Table with numeric indexes only, always ordered and sequential
 
 --- Array utilities class built with performances in mind (with 'array' we mean tables with numeric indexes only, always ordered and sequential)
 ---@class ArrayUtility

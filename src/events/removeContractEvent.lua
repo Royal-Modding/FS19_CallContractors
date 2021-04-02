@@ -60,6 +60,6 @@ function RemoveContractEvent.sendEvent(signedContractId, reason)
     if g_server ~= nil then
         g_server:broadcastEvent(RemoveContractEvent:new(signedContractId, reason), true)
     else
-        g_debugManager:devError("[%s] RemoveContractEvent can only be sent from server", CallContractors.name)
+        g_debugManager:devError("[%s] RemoveContractEvent can only be sent from server", g_callContractors.name)
     end
 end

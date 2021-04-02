@@ -74,7 +74,7 @@ function CCGui:onCreate()
     self.ccContractItemTemplate:unlinkElement()
     self.ccContractItemTemplate:setVisible(false)
 
-    self.ccContractSigningImageBg.elements[1]:setImageFilename(Utils.getFilename("img/cs_icon.dds", CallContractors.guiDirectory))
+    self.ccContractSigningImageBg.elements[1]:setImageFilename(Utils.getFilename("img/cs_icon.dds", g_callContractors.guiDirectory))
 end
 
 ---@param farmId number
@@ -144,7 +144,7 @@ function CCGui:refreshList()
         new:setVisible(true)
         new.elements[1].elements[1]:setImageFilename(contract.npc.imageFilename)
         new.elements[2]:setText(contract.npc.title)
-        new.elements[3]:setText(string.format(g_i18n:getText("gui_cc_job_time_text"), math.ceil(signedContract.ttl / 60 / 60 / 1000))) -- ms to hours
+        new.elements[3]:setText(string.format(g_i18n:getText("gui_cc_job_time_text"), math.ceil(MathUtil.msToHours(signedContract.ttl))))
         new.elements[4]:setText(g_i18n:formatMoney(contract.workPrice))
         new.elements[7]:setText(contract.type.title)
         new:updateAbsolutePosition()

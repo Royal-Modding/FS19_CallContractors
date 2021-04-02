@@ -1,7 +1,7 @@
 --- Royal Utility
 
 ---@author Royal Modding
----@version 2.0.3.0
+---@version 2.0.5.0
 ---@date 17/02/2017
 
 ---@class FadeEffect

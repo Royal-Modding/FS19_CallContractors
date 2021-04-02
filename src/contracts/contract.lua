@@ -107,11 +107,6 @@ function Contract:readFromStream(streamId)
     self.workPrice = streamReadFloat32(streamId)
 end
 
----@return boolean runResult
-function Contract:run()
-    return true
-end
-
 function Contract:saveToXMLFile(xmlFile, key)
     setXMLInt(xmlFile, key .. "#npc", self.npc.index)
     setXMLInt(xmlFile, key .. "#waitTime", self.waitTime)
@@ -130,4 +125,9 @@ function Contract:loadFromXMLFile(xmlFile, key)
     self.fruitId = getXMLInt(xmlFile, key .. "#fruitId")
     self.callPrice = getXMLFloat(xmlFile, key .. "#callPrice")
     self.workPrice = getXMLFloat(xmlFile, key .. "#workPrice")
+end
+
+---@return boolean runResult
+function Contract:run()
+    return false
 end

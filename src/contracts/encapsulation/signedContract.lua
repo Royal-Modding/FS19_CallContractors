@@ -27,7 +27,7 @@ function SignedContract.new(key, contract, mt)
     self.id = 0
 
     ---@type number
-    self.ttl = contract and contract.waitTime * 60 * 60 * 1000 or 0 -- hours to ms
+    self.ttl = contract and MathUtil.hoursToMs(contract.waitTime) or 0
 
     return self
 end

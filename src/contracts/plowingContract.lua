@@ -78,7 +78,7 @@ function Contract:run()
     if field ~= nil then
         for _, partition in ipairs(field.maxFieldStatusPartitions) do
             local sx, sz, wx, wz, hx, hz = Utility.getPPP(partition)
-            FSDensityMapUtil.updatePlowArea(sx, sz, wx, wz, hx, hz, true, true, field.fieldAngle)
+            FSDensityMapUtil.updatePlowArea(sx, sz, wx, wz, hx, hz, false, false, field.fieldAngle)
             FSDensityMapUtil.eraseTireTrack(sx, sz, wx, wz, hx, hz)
         end
         return true

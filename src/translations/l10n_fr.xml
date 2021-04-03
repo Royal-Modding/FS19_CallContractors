@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <l10n>
     <texts>
-        <text name="input_CALL_CONTRACTORS_SHOW"                    text="Shows the contract management GUI (Call Contractors)" />
-        <text name="cc_job_type_cultivating"                        text="Cultivating" />
-        <text name="cc_job_type_subsoiling"                         text="Subsoiling" />
-        <text name="cc_job_type_plowing"                            text="Plowing" />
-        <text name="cc_job_type_sowing"                             text="Sowing" />
-        <text name="cc_job_type_selling_goods"                      text="Selling" />
+        <text name="input_CALL_CONTRACTORS_SHOW"                    text="Affiche l'interface de gestion des contrats (Call Contractors)" />
+        <text name="cc_job_type_cultivating"                        text="Cultiver" />
+        <text name="cc_job_type_subsoiling"                         text="Sous-solage" />
+        <text name="cc_job_type_plowing"                            text="Labour" />
+        <text name="cc_job_type_sowing"                             text="Semis" />
+        <text name="cc_job_type_selling_goods"                      text="Vendre" />
         <text name="gui_cc_container_title"                         text="Call Contractors" />
-        <text name="gui_cc_field_selector_title"                    text="Field" />
-        <text name="gui_cc_fruit_selector_title"                    text="Fruit" />
-        <text name="gui_cc_job_type_selector_title"                 text="Job" />
-        <text name="gui_cc_job_time_text"                           text="Will do the job within %d hours" />
-        <text name="gui_cc_convening_fee_text"                      text="Convening fee:" />
-        <text name="gui_cc_job_charge_text"                         text="Job charge:" />
-        <text name="gui_cc_payment_amount_text"                     text="Payment amount:" />
-        <text name="gui_cc_remaining_payment_text"                  text="Remaining payment:" />
-        <text name="gui_cc_sign"                                    text="Sign contract" />
-        <text name="dialog_cc_cannot_be_performed"                  text="Contract signing cancelled, contract proposal was no longer valid!" />
-        <text name="dialog_cc_already_active"                       text="Contract signing cancelled, looks like another one has already been signed!" />
-        <text name="dialog_cc_signing_confirm_title"                text="Are you sure you want to accept this contract?" />
-        <text name="dialog_cc_signing_confirm_text"                 text="You'll have to pay %s now and an additional %s when the work is done." />
-        <text name="dialog_cc_cancel_confirm_title"                 text="Are you sure you want to cancel this contract?" />
-        <text name="dialog_cc_cancel_confirm_text"                  text="You'll not be refunded of the convening fee." />
-        <text name="warning_cc_noFarmlands"                         text="There's nothing for you here, buy some land first!" />
-        <text name="warning_cc_noFarm"                              text="There's nothing for you here, join a farm first!" />
-        <text name="finance_cc_contractorsPayment"                  text="Contractors Payment" />
-        <text name="dialog_cc_contract_cancelled_by_contractor"     text="The contractor %s had an unexpected issue and therefore will not be able to fulfill the signed contract. He apologized and refunded you twice the amount of the deposit you paid." />
-        <text name="dialog_cc_contract_prerequisites_no_longer_met" text="Something may have changed since the contract sign and the contractor %s can no longer perform the job." />
+        <text name="gui_cc_field_selector_title"                    text="Champ" />
+        <text name="gui_cc_fruit_selector_title"                    text="Culture" />
+        <text name="gui_cc_job_type_selector_title"                 text="Travail" />
+        <text name="gui_cc_job_time_text"                           text="Fera le travail dans les %d heures" />
+        <text name="gui_cc_convening_fee_text"                      text="Coût d'appel:" />
+        <text name="gui_cc_job_charge_text"                         text="Prix de travail:" />
+        <text name="gui_cc_payment_amount_text"                     text="Montant du paiement:" />
+        <text name="gui_cc_remaining_payment_text"                  text="Paiement restant:" />
+        <text name="gui_cc_sign"                                    text="Accepter" />
+        <text name="dialog_cc_cannot_be_performed"                  text="Contrat annulée, la proposition de contrat n'était plus valide!" />
+        <text name="dialog_cc_already_active"                       text="Contrat annulée, il semble que quelcu'un a déjà pris le contrat!" />
+        <text name="dialog_cc_signing_confirm_title"                text="Êtes-vous sûr de vouloir accepter ce contrat?" />
+        <text name="dialog_cc_signing_confirm_text"                 text="Vous devrez payer %s et un %s supplémentaire lorsque le travail est terminé." />
+        <text name="dialog_cc_cancel_confirm_title"                 text="Êtes-vous sûr de vouloir annuler ce contrat?" />
+        <text name="dialog_cc_cancel_confirm_text"                  text="Vous ne serez pas remboursé des frais de convocation." />
+        <text name="warning_cc_noFarmlands"                         text="Il n'y a rien pour toi ici, achetez d'abord un terrain!" />
+        <text name="warning_cc_noFarm"                              text="Il n'y a rien pour toi ici, rejoignez une ferme d'abord!" />
+        <text name="finance_cc_contractorsPayment"                  text="Paiement des sous-traitants" />
+        <text name="dialog_cc_contract_cancelled_by_contractor"     text="Le sous-traitant %s a eu un événement inattendu et ne pourra pas terminer le travail. Il s'excuse et vous a remboursé le double du prix que vous avez payé pour l'appeler." />
+        <text name="dialog_cc_contract_prerequisites_no_longer_met" text="Quelque chose a changé après la signature du contrat et le sous-traitant %s ne peut plus faire le travail." />
     </texts>
 </l10n>

@@ -2,7 +2,7 @@
 
 ---@author ${author}
 ---@version r_version_r
----@date 18/03/2021
+---@date 03/04/2021
 
 ---@class SubsoilingContract : Contract
 SubsoilingContract = {}
@@ -40,8 +40,8 @@ function SubsoilingContract:randomize(otherContractProposals)
     local minWaitTimePriceMultiplier = 4
     local maxWaitTimePriceMultiplier = 1
 
-    local callPrice = 85 * economicDifficulty
-    local pricePerHa = 150 * economicDifficulty
+    local callPrice = 80 * economicDifficulty
+    local pricePerHa = 175 * economicDifficulty
 
     -- prevents multiple contracts with the same waitTime
     repeat

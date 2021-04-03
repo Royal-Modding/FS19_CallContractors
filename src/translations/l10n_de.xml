@@ -17,16 +17,16 @@
         <text name="gui_cc_payment_amount_text"                     text="Zahlungsbetrag:" />
         <text name="gui_cc_remaining_payment_text"                  text="Restzahlung:" />
         <text name="gui_cc_sign"                                    text="Vertrag annehmen" />
-        <text name="dialog_cc_cannot_be_performed"                  text="Contract signing cancelled, contract proposal was no longer valid!" />
-        <text name="dialog_cc_already_active"                       text="Contract signing cancelled, looks like another one has already been signed!" />
-        <text name="dialog_cc_signing_confirm_title"                text="Are you sure you want to accept this contract?" />
-        <text name="dialog_cc_signing_confirm_text"                 text="You'll have to pay %s now and an additional %s when the work is done." />
-        <text name="dialog_cc_cancel_confirm_title"                 text="Are you sure you want to cancel this contract?" />
-        <text name="dialog_cc_cancel_confirm_text"                  text="You'll not be refunded of the Initiale Kosten." />
-        <text name="warning_cc_noFarmlands"                         text="There's nothing for you here, buy some land first!" />
-        <text name="warning_cc_noFarm"                              text="There's nothing for you here, join a farm first!" />
-        <text name="finance_cc_contractorsPayment"                  text="Contractors Payment" />
-        <text name="dialog_cc_contract_cancelled_by_contractor"     text="The contractor %s had an unexpected issue and therefore will not be able to fulfill the signed contract. He apologized and refunded you twice the amount of the deposit you paid." />
-        <text name="dialog_cc_contract_prerequisites_no_longer_met" text="Something may have changed since the contract sign and the contractor %s can no longer perform the job." />
+        <text name="dialog_cc_cannot_be_performed"                  text="Vertragsunterzeichnung storniert, Vertragsvorschlag war nicht mehr gültig!" />
+        <text name="dialog_cc_already_active"                       text="Vertragsunterzeichnung storniert, sieht so aus, als ob bereits eine andere unterschrieben wurde!" />
+        <text name="dialog_cc_signing_confirm_title"                text="Sind Sie sicher, dass Sie diesen Vertrag annehmen möchten?" />
+        <text name="dialog_cc_signing_confirm_text"                 text="Sie müssen jetzt %s und zusätzlich %s bezahlen, wenn die Arbeit erledigt ist." />
+        <text name="dialog_cc_cancel_confirm_title"                 text="Möchten Sie diesen Vertrag wirklich kündigen?" />
+        <text name="dialog_cc_cancel_confirm_text"                  text="Die Initiale Kosten werden Ihnen nicht erstattet." />
+        <text name="warning_cc_noFarmlands"                         text="Hier ist nichts für dich, kaufe zuerst etwas Land!" />
+        <text name="warning_cc_noFarm"                              text="Hier ist nichts für dich, trete zuerst einer Farm bei!" />
+        <text name="finance_cc_contractorsPayment"                  text="Zahlungen an Auftragnehmer" />
+        <text name="dialog_cc_contract_cancelled_by_contractor"     text="Der Auftragnehmer %s hatte ein Problem und wird die Arbeit nicht beenden können. Er entschuldigt sich und erstattet Ihnen den doppelten Preis, den Sie für den Anruf bezahlt haben." />
+        <text name="dialog_cc_contract_prerequisites_no_longer_met" text="Möglicherweise hat sich seit der Vertragsunterzeichnung etwas geändert und der Auftragnehmer %s kann die Arbeit nicht mehr ausführen." />
     </texts>
 </l10n>

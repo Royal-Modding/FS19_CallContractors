@@ -12,7 +12,7 @@
         <text name="gui_cc_job_type_selector_title"                 text="Arbeit" />
         <text name="gui_cc_job_time_text"                           text="Erledigt die Arbeit innerhalb von %s Stunden" />
         <text name="gui_cc_convening_fee_text"                      text="Initiale Kosten:" />
-        <text name="gui_cc_job_chrge_text"                          text="Job gebühr:" />
+        <text name="gui_cc_job_charge_text"                         text="Job gebühr:" />
         <text name="gui_cc_payment_amount_text"                     text="Zahlungsbetrag:" />
         <text name="gui_cc_remaining_payment_text"                  text="Restzahlung:" />
         <text name="gui_cc_sign"                                    text="Vertrag annehmen" />

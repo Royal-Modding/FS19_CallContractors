@@ -12,7 +12,7 @@
         <text name="gui_cc_job_type_selector_title"                 text="Job" />
         <text name="gui_cc_job_time_text"                           text="Will do the job within %d hours" />
         <text name="gui_cc_convening_fee_text"                      text="Convening fee:" />
-        <text name="gui_cc_job_chrge_text"                          text="Job charge:" />
+        <text name="gui_cc_job_charge_text"                         text="Job charge:" />
         <text name="gui_cc_payment_amount_text"                     text="Payment amount:" />
         <text name="gui_cc_remaining_payment_text"                  text="Remaining payment:" />
         <text name="gui_cc_sign"                                    text="Sign contract" />

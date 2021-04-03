@@ -12,7 +12,7 @@
         <text name="gui_cc_job_type_selector_title"                 text="Lavoro" />
         <text name="gui_cc_job_time_text"                           text="Effettuerà il lavoro in %d ore" />
         <text name="gui_cc_convening_fee_text"                      text="Costo della chiamata:" />
-        <text name="gui_cc_job_chrge_text"                          text="Prezzo del lavoro:" />
+        <text name="gui_cc_job_charge_text"                         text="Prezzo del lavoro:" />
         <text name="gui_cc_payment_amount_text"                     text="Importo da pagare:" />
         <text name="gui_cc_remaining_payment_text"                  text="Pagamento residuo:" />
         <text name="gui_cc_sign"                                    text="Accetta" />

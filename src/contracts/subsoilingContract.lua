@@ -4,17 +4,17 @@
 ---@version r_version_r
 ---@date 18/03/2021
 
----@class PlowingContract : Contract
-PlowingContract = {}
-PlowingContract_mt = Class(PlowingContract, Contract)
+---@class SubsoilingContract : Contract
+SubsoilingContract = {}
+SubsoilingContract_mt = Class(SubsoilingContract, Contract)
 
---- PlowingContract class
+--- SubsoilingContract class
 ---@param contractType ContractType
 ---@param mt? table custom meta table
----@return PlowingContract
-function PlowingContract.new(contractType, mt)
-    ---@type PlowingContract
-    local self = Contract.new(contractType, mt or PlowingContract_mt)
+---@return SubsoilingContract
+function SubsoilingContract.new(contractType, mt)
+    ---@type SubsoilingContract
+    local self = Contract.new(contractType, mt or SubsoilingContract_mt)
     return self
 end
 
@@ -22,13 +22,13 @@ end
 ---@param fieldId integer
 ---@param fruitId integer
 ---@return boolean
-function PlowingContract.checkPrerequisites(farmId, fieldId, fruitId)
+function SubsoilingContract.checkPrerequisites(farmId, fieldId, fruitId)
     local field = g_fieldManager:getFieldByIndex(fieldId)
     return g_farmlandManager:getFarmlandOwner(field.farmland.id) == farmId
 end
 
 ---@param otherContractProposals ContractProposal[]
-function PlowingContract:randomize(otherContractProposals)
+function SubsoilingContract:randomize(otherContractProposals)
     local economicDifficulty = g_currentMission.missionInfo.economicDifficulty
 
     local minWaitTime = 2
@@ -40,8 +40,8 @@ function PlowingContract:randomize(otherContractProposals)
     local minWaitTimePriceMultiplier = 4
     local maxWaitTimePriceMultiplier = 1
 
-    local callPrice = 75 * economicDifficulty
-    local pricePerHa = 125 * economicDifficulty
+    local callPrice = 85 * economicDifficulty
+    local pricePerHa = 150 * economicDifficulty
 
     -- prevents multiple contracts with the same waitTime
     repeat
@@ -73,12 +73,13 @@ function PlowingContract:randomize(otherContractProposals)
 end
 
 ---@return boolean runResult
-function Contract:run()
+function SubsoilingContract:run()
     local field = self:getField()
     if field ~= nil then
         for _, partition in ipairs(field.maxFieldStatusPartitions) do
             local sx, sz, wx, wz, hx, hz = Utility.getPPP(partition)
-            FSDensityMapUtil.updatePlowArea(sx, sz, wx, wz, hx, hz, false, false, field.fieldAngle)
+            FSDensityMapUtil.updateCultivatorArea(sx, sz, wx, wz, hx, hz, false, false, field.fieldAngle, nil, true)
+            FSDensityMapUtil.updateSubsoilerArea(sx, sz, wx, wz, hx, hz, false)
             FSDensityMapUtil.eraseTireTrack(sx, sz, wx, wz, hx, hz)
         end
         return true

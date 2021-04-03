@@ -35,7 +35,7 @@ function CultivatingContract:randomize(otherContractProposals)
     local maxWaitTime = 48
 
     ---@type RandomInterval[]
-    local waitTimeBatches = {{min = 2, max = 6}, {min = 7, max = 16}, {min = 17, max = 35}, {min = 36, max = 48}}
+    local waitTimeBatches = {{min = 2, max = 6}, {min = 4, max = 8}, {min = 7, max = 16}, {min = 17, max = 35}, {min = 17, max = 35}, {min = 36, max = 48}}
 
     local minWaitTimePriceMultiplier = 4
     local maxWaitTimePriceMultiplier = 1

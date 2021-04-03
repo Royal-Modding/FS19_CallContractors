@@ -39,13 +39,15 @@ function CallContractors:initialize()
     source(Utils.getFilename("contracts/plowingContract.lua", self.directory))
     source(Utils.getFilename("contracts/sowingContract.lua", self.directory))
     source(Utils.getFilename("contracts/sellingGoodsContract.lua", self.directory))
+    source(Utils.getFilename("contracts/subsoilingContract.lua", self.directory))
 
     ---@type ContractType[]
     self.CONTRACT_TYPES = {}
     self.CONTRACT_TYPES[1] = ContractType.new(1, PlowingContract, "plowing_contract_type", g_i18n:getText("cc_job_type_plowing"))
     self.CONTRACT_TYPES[2] = ContractType.new(2, CultivatingContract, "cultivating_contract_type", g_i18n:getText("cc_job_type_cultivating"))
-    self.CONTRACT_TYPES[3] = SowingContractType.new(3, SowingContract, "sowing_contract_type", g_i18n:getText("cc_job_type_sowing"))
-    --self.JOB_TYPES[4] = {id = 4, contractClass = SellingGoodsContract, name = "sellingGoods", title = g_i18n:getText("cc_job_type_selling_goods"), requireFieldParam = false, requireFruitParam = true}
+    self.CONTRACT_TYPES[3] = ContractType.new(2, SubsoilingContract, "subsoiling_contract_type", g_i18n:getText("cc_job_type_subsoiling"))
+    self.CONTRACT_TYPES[4] = SowingContractType.new(3, SowingContract, "sowing_contract_type", g_i18n:getText("cc_job_type_sowing"))
+    --self.JOB_TYPES[5] = {id = 4, contractClass = SellingGoodsContract, name = "sellingGoods", title = g_i18n:getText("cc_job_type_selling_goods"), requireFieldParam = false, requireFruitParam = true}
 
     self.contractsManager = ContractsManager:load()
 

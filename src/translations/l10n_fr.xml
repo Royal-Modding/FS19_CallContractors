@@ -4,8 +4,8 @@
         <text name="input_CALL_CONTRACTORS_SHOW"                    text="Affiche l'interface de gestion des contrats (Call Contractors)" />
         <text name="cc_job_type_cultivating"                        text="Cultiver" />
         <text name="cc_job_type_subsoiling"                         text="Sous-solage" />
-        <text name="cc_job_type_limeSpreading"                      text="Lime spilling" />
-        <text name="cc_job_type_plowing"                            text="Labour" />
+        <text name="cc_job_type_limeSpreading"                      text="Épandage de chaux" />
+        <text name="cc_job_type_plowing"                            text="Labourage" />
         <text name="cc_job_type_sowing"                             text="Semis" />
         <text name="cc_job_type_selling_goods"                      text="Vendre" />
         <text name="gui_cc_container_title"                         text="Call Contractors" />

@@ -8,7 +8,17 @@
 	<description>
 		<en>
 			<![CDATA[
-En description
+This mod allows you to outsource jobs for which you don't have the time or equipment to contractors.
+The cost of the work will vary mainly according to the time it takes, if you have few money to spend you can be satisfied with contracts done in more time, while if you urgently need the work to be completed you will have to spend a little more.
+Press CTRL + SHIFT + C to open the contractors management panel.
+
+Types of jobs currently available:
+ - Plowing
+ - Cultivating
+ - Sowing
+ - Subsoiling
+ - Lime spreading
+ - Selling goods
 ]]>
 		</en>
 		<de>

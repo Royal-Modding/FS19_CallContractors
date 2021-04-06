@@ -3,8 +3,8 @@
     <texts>
         <text name="input_CALL_CONTRACTORS_SHOW"                    text="Zeigt die Vertragsverwaltung an (Call Contractors)" />
         <text name="cc_job_type_cultivating"                        text="Grubbern" />
-        <text name="cc_job_type_subsoiling"                         text="Subsoiling" />
-        <text name="cc_job_type_limeSpreading"                      text="Lime spilling" />
+        <text name="cc_job_type_subsoiling"                         text="Tiefenlocker" />
+        <text name="cc_job_type_limeSpreading"                      text="Kalkausbreitung" />
         <text name="cc_job_type_plowing"                            text="Pflügen" />
         <text name="cc_job_type_sowing"                             text="Säen" />
         <text name="cc_job_type_selling_goods"                      text="Verkauf" />

@@ -23,12 +23,32 @@ Types of jobs currently available:
 		</en>
 		<de>
 			<![CDATA[
-De description
+Dieser Mod ermöglicht es Ihnen, Arbeiten, für die Sie keine Zeit oder Ausrüstung haben, an Auftragnehmer auszulagern.
+Die Kosten für die Arbeit variieren hauptsächlich nach der benötigten Zeit. Wenn Sie wenig Geld zur Verfügung haben, können Sie mit Aufträgen zufrieden sein, die in mehr Zeit erledigt werden, während Sie, wenn Sie die Arbeit dringend benötigen, etwas mehr ausgeben müssen.
+Drücken Sie STRG + UMSCHALT + C, um die Auftragnehmerverwaltung zu öffnen.
+
+Derzeit verfügbare Auftragsarten:
+ - Pflügen
+ - Kultivieren
+ - Säen
+ - Unterpflügen
+ - Kalk streuen
+ - Verkaufen
 ]]>
 		</de>
 		<fr>
 			<![CDATA[
-Fr description
+Ce mode vous permet de confier à des entrepreneurs les travaux pour lesquels vous n'avez pas le temps ou l'équipement nécessaire.
+Le coût du travail varie principalement en fonction du temps qu'il prend. Si vous avez peu d'argent à dépenser, vous pouvez vous contenter de contrats réalisés en plus de temps, tandis que si vous avez besoin d'un travail urgent, vous devrez dépenser un peu plus.
+Appuyez sur CTRL + SHIFT + C pour ouvrir le panneau de gestion des contractants.
+
+Types de travaux actuellement disponibles :
+ - Labourage
+ - Cultiver
+ - Semer
+ - Sous-sol
+ - Épandage de chaux
+ - Vente de produits
 ]]>
 		</fr>
 	</description>

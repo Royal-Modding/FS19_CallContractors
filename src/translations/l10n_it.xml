@@ -3,8 +3,8 @@
     <texts>
         <text name="input_CALL_CONTRACTORS_SHOW"                    text="Visualizza menu chiama terzista (Call Contractors)" />
         <text name="cc_job_type_cultivating"                        text="Coltivazione" />
-        <text name="cc_job_type_subsoiling"                         text="Subsoiling" />
-        <text name="cc_job_type_limeSpreading"                      text="Lime spilling" />
+        <text name="cc_job_type_subsoiling"                         text="Ripuntatura" />
+        <text name="cc_job_type_limeSpreading"                      text="Calcitazione" />
         <text name="cc_job_type_plowing"                            text="Aratura" />
         <text name="cc_job_type_sowing"                             text="Semina" />
         <text name="cc_job_type_selling_goods"                      text="Vendita" />

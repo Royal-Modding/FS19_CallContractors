@@ -4,6 +4,7 @@
         <text name="input_CALL_CONTRACTORS_SHOW"                    text="Shows the contract management GUI (Call Contractors)" />
         <text name="cc_job_type_cultivating"                        text="Cultivating" />
         <text name="cc_job_type_subsoiling"                         text="Subsoiling" />
+        <text name="cc_job_type_limeSpreading"                      text="Lime spilling" />
         <text name="cc_job_type_plowing"                            text="Plowing" />
         <text name="cc_job_type_sowing"                             text="Sowing" />
         <text name="cc_job_type_selling_goods"                      text="Selling" />

@@ -76,7 +76,7 @@ function LimeSpreadingContract:randomize(otherContractProposals)
 end
 
 ---@return boolean runResult
-function Contract:run()
+function LimeSpreadingContract:run()
     local field = self:getField()
     local sprayType = g_sprayTypeManager:getSprayTypeByFillTypeIndex(FillType.LIME)
     if field ~= nil then

@@ -75,7 +75,7 @@ function SowingContract:randomize(otherContractProposals)
 end
 
 ---@return boolean runResult
-function Contract:run()
+function SowingContract:run()
     local field = self:getField()
     if field ~= nil then
         for _, partition in ipairs(field.maxFieldStatusPartitions) do

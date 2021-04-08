@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+    <texts>
+        <text name="input_CALL_CONTRACTORS_SHOW"                    text="Pokaż menu do zarządzania kontraktami (Call Contractors)" />
+        <text name="cc_job_type_cultivating"                        text="Kultywatorowanie" />
+        <text name="cc_job_type_subsoiling"                         text="Głęboszowanie" />
+        <text name="cc_job_type_limeSpreading"                      text="Wapnowanie" />
+        <text name="cc_job_type_plowing"                            text="Oranie" />
+        <text name="cc_job_type_sowing"                             text="Sianie" />
+        <text name="cc_job_type_selling_goods"                      text="Sprzedawnie" />
+        <text name="gui_cc_container_title"                         text="Call Contractors" />
+        <text name="gui_cc_field_selector_title"                    text="Pole" />
+        <text name="gui_cc_fruit_selector_title"                    text="Uprawa" />
+        <text name="gui_cc_job_type_selector_title"                 text="Zlecenie" />
+        <text name="gui_cc_job_time_text"                           text="Zlecenie zostanie wykonane w ciągu %d godz." />
+        <text name="gui_cc_convening_fee_text"                      text="Wstępne koszty:" />
+        <text name="gui_cc_job_charge_text"                         text="Koszty zlecenia:" />
+        <text name="gui_cc_payment_amount_text"                     text="Kwota do zapłaty:" />
+        <text name="gui_cc_remaining_payment_text"                  text="Pozostała płatność:" />
+        <text name="gui_cc_sign"                                    text="Podpisz kontrakt" />
+        <text name="dialog_cc_cannot_be_performed"                  text="Anulowano podpisanie kontraktu, stracił on ważność!" />
+        <text name="dialog_cc_already_active"                       text="Anulowano podpisanie kontraktu, wygląda na to, że inny został już podpisany!" />
+        <text name="dialog_cc_signing_confirm_title"                text="Na pewno chcesz przyjąć ten kontrakt?" />
+        <text name="dialog_cc_signing_confirm_text"                 text="Będziesz musiał teraz zapłacić %s i dodatkowo %s po zakończeniu zlecenia." />
+        <text name="dialog_cc_cancel_confirm_title"                 text="Na pewno chcesz anulować ten kontrakt?" />
+        <text name="dialog_cc_cancel_confirm_text"                  text="Nie otrzymasz zwrotu wstępnych kosztów." />
+        <text name="warning_cc_noFarmlands"                         text="Nie ma tu nic dla Ciebie, kup najpierw trochę ziemi!" />
+        <text name="warning_cc_noFarm"                              text="Nie ma tu nic dla Ciebie, dołącz najpierw do farmy!" />
+        <text name="finance_cc_contractorsPayment"                  text="Opłata za kontrakty" />
+        <text name="dialog_cc_contract_cancelled_by_contractor"     text="Wykonawca %s miał niespodziewany problem i dlatego nie będzie w stanie wywiązać się z podpisanego kontraktu. Przeprosił Cię i zwrócił Ci dwukrotność wpłaconej zaliczki." />
+        <text name="dialog_cc_contract_prerequisites_no_longer_met" text="Możliwe że coś się zmieniło od czasu podpisania kontraktu i wykonawca %s nie może już go wykonywać." />
+    </texts>
+</l10n>

@@ -31,7 +31,7 @@ function SignContractSuccessEvent:writeStream(streamId, _)
     streamWriteString(streamId, self.signedContract.key)
     streamWriteUInt8(streamId, self.signedContract.contract.type.id)
     streamWriteUInt16(streamId, self.signedContract.id)
-    streamWriteUIntN(streamId, self.signedContract.ttl, 32)
+    streamWriteUIntN(streamId, self.signedContract.ttl, 28)
     self.signedContract.contract:writeToStream(streamId)
 end
 
@@ -41,7 +41,7 @@ function SignContractSuccessEvent:readStream(streamId, connection)
     local sKey = streamReadString(streamId)
     local contractTypeId = streamReadUInt8(streamId)
     local id = streamReadUInt16(streamId)
-    local ttl = streamReadUIntN(streamId, 32)
+    local ttl = streamReadUIntN(streamId, 28)
 
     local contractType = g_callContractors.CONTRACT_TYPES[contractTypeId]
     local contract = contractType:getContractInstance()

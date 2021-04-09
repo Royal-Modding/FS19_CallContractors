@@ -70,7 +70,7 @@ function LimeSpreadingContract:randomize(otherContractProposals)
         otherContractProposals,
         ---@type ContractProposal
         function(cp)
-            return cp.contract.npc == self.npc
+            return cp.contract.npc.imageFilename == self.npc.imageFilename
         end
     ) == 0)
 end

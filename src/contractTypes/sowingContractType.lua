@@ -27,5 +27,5 @@ end
 ---@param fruit FruitTypeEntry
 ---@return boolean
 function SowingContractType.fruitsFilter(farmId, fruit)
-    return fruit.index ~= FruitType.WEED and fruit.index ~= FruitType.POPLAR and fruit.index ~= FruitType.DRYGRASS
+    return fruit.index ~= FruitType.POPLAR and fruit.allowsSeeding
 end

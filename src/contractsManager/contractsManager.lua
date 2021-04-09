@@ -43,8 +43,6 @@ function ContractsManager:load()
     if self.isServer then
         g_farmlandManager:addStateChangeListener(self)
         g_messageCenter:subscribe(MessageType.FARM_DELETED, self.farmDestroyed, self)
-    else
-        RequestContractsEvent.sendEvent()
     end
 
     return self
@@ -142,7 +140,7 @@ function ContractsManager:signContract(contractProposal)
 
         return true, signedContract
     else
-        g_debugManager:devError("[%s] ContractsManager:signContract can only run server-side", g_callContractors.name)
+        g_logManager:devError("[%s] ContractsManager:signContract can only run server-side", g_callContractors.name)
         return false, SignContractErrorEvent.ERROR_TYPES.NOT_ON_SERVER
     end
 end
@@ -156,14 +154,14 @@ end
 ---@param contractProposalKey string
 ---@param errorType integer
 function ContractsManager:onContractSignError(contractProposalKey, errorType)
-    g_logManager:devError("[%s] onContractSignError(contractProposalKey: %s, errorType: %s)", g_callContractors.name, contractProposalKey, TableUtility.indexOf(SignContractErrorEvent.ERROR_TYPES, errorType))
+    g_logManager:devWarning("[%s] onContractSignError(contractProposalKey: %s, errorType: %s)", g_callContractors.name, contractProposalKey, TableUtility.indexOf(SignContractErrorEvent.ERROR_TYPES, errorType))
     self:callEventListeners(self.EVENT_TYPES.CONTRACT_SIGN_ERROR, contractProposalKey, errorType)
 end
 
 ---@param signedContractId integer
 ---@param reason integer
 function ContractsManager:onContractRemoved(signedContractId, reason)
-    g_logManager:devInfo("[%s] onContractRemoved(contractId: %s, reason: %s)", g_callContractors.name, signedContractId, TableUtility.indexOf(RemoveContractEvent.REASONS, reason))
+    --g_logManager:devInfo("[%s] onContractRemoved(contractId: %s, reason: %s)", g_callContractors.name, signedContractId, TableUtility.indexOf(RemoveContractEvent.REASONS, reason))
 
     local signedContract = self:getSignedContractById(signedContractId)
     self.signedContracts[signedContract.key] = nil
@@ -239,14 +237,14 @@ function ContractsManager:update(dt)
     -- update signed contracts ttl
     ---@type SignedContract
     for _, signedContract in pairs(self.signedContracts) do
-        -- cancel one contract every ~15 (calculated on an avarage contract wait time of 23h)
-        if math.random(1, math.ceil(77550000 / g_currentMission.missionInfo.timeScale)) == 500 then
-            -- refund twice the amount of the deposit
-            g_currentMission:addMoney(signedContract.contract.callPrice * 2, signedContract.contract.farmId, g_callContractors.moneyType, true, true)
-            RemoveContractEvent.sendEvent(signedContract.id, RemoveContractEvent.REASONS.CANCELLED_BY_CONTRACTOR)
-        else
-            signedContract.ttl = math.max(signedContract.ttl - scaledDt, 0)
-            if self.isServer and signedContract.ttl <= 0 then
+        signedContract.ttl = math.max(signedContract.ttl - scaledDt, 0)
+        if self.isServer then
+            -- cancel one contract every ~15 (calculated on an avarage contract wait time of 23h)
+            if math.random(1, math.ceil(77550000 / g_currentMission.missionInfo.timeScale)) == 500 then
+                -- refund twice the amount of the deposit
+                g_currentMission:addMoney(signedContract.contract.callPrice * 2, signedContract.contract.farmId, g_callContractors.moneyType, true, true)
+                RemoveContractEvent.sendEvent(signedContract.id, RemoveContractEvent.REASONS.CANCELLED_BY_CONTRACTOR)
+            elseif signedContract.ttl <= 0 then
                 -- check if prerequisites are still met
                 if signedContract.contract:hasPrerequisites() then
                     -- run the contract

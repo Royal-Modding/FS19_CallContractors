@@ -40,7 +40,7 @@ function RequestContractsEvent:run(connection)
             connection:sendEvent(SignContractSuccessEvent:new(signedContract))
         end
     else
-        g_debugManager:devError("[%s] RequestContractsEvent can only run server-side", g_callContractors.name)
+        g_logManager:devError("[%s] RequestContractsEvent can only run server-side", g_callContractors.name)
     end
 end
 

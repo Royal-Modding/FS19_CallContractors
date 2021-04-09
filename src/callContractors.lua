@@ -10,12 +10,10 @@ InitRoyalMod(Utils.getFilename("rmod/", g_currentModDirectory))
 InitRoyalUtility(Utils.getFilename("utility/", g_currentModDirectory))
 
 ---@class CallContractors : RoyalMod
-CallContractors = RoyalMod.new(r_debug_r, false)
+local CallContractors = RoyalMod.new(r_debug_r, false)
 
 function CallContractors:initialize()
-    self.gameEnv["g_callContractors"] = self
-    ---@type CallContractors
-    g_callContractors = self
+    self.gameEnv["g_callContractors"] = g_callContractors
 
     self.savegameFilename = "callContractors.xml"
 
@@ -52,10 +50,8 @@ function CallContractors:initialize()
     self.CONTRACT_TYPES[5] = SowingContractType.new(5, SowingContract, "sowing_contract_type", g_i18n:getText("cc_job_type_sowing"))
     self.CONTRACT_TYPES[6] = SellingGoodsContractType.new(6, SellingGoodsContract, "selling_contract_type", g_i18n:getText("cc_job_type_selling_goods"))
 
-    self.contractsManager = ContractsManager:load()
-
-    ---@type ContractsManager
-    g_contractsManager = self.contractsManager
+    g_contractsManager = ContractsManager:load()
+    self.contractsManager = g_contractsManager
 
     g_gui:loadProfiles(self.guiDirectory .. "guiProfiles.xml")
 
@@ -105,6 +101,7 @@ function CallContractors:onLoadFinished()
 end
 
 function CallContractors:onStartMission()
+    RequestContractsEvent.sendEvent()
 end
 
 function CallContractors:onMissionStarted()
@@ -172,3 +169,5 @@ function CallContractors:openGui()
         end
     end
 end
+
+g_callContractors = CallContractors

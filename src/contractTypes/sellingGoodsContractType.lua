@@ -57,7 +57,7 @@ end
 ---@param fieldId integer
 ---@param fruitId integer
 ---@return string
-function ContractType:getSignedContractKey(farmId, fieldId, fruitId)
+function SellingGoodsContractType:getSignedContractKey(farmId, fieldId, fruitId)
     -- only one contract per fruit at the same time
-    return string.format("%d_%d", farmId, fruitId)
+    return string.format("%s_%d_%d", self.name, farmId, fruitId)
 end

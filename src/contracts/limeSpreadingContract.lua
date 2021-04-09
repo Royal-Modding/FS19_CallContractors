@@ -6,7 +6,7 @@
 
 ---@class LimeSpreadingContract : Contract
 LimeSpreadingContract = {}
-LimeSpreadingContract_mt = Class(LimeSpreadingContract, Contract)
+local LimeSpreadingContract_mt = Class(LimeSpreadingContract, Contract)
 
 --- LimeSpreadingContract class
 ---@param contractType ContractType

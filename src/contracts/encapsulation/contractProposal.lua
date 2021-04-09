@@ -6,7 +6,7 @@
 
 ---@class ContractProposal : Class
 ContractProposal = {}
-ContractProposal_mt = Class(ContractProposal)
+local ContractProposal_mt = Class(ContractProposal)
 
 --- encapsulation class for contract proposals
 ---@param key string

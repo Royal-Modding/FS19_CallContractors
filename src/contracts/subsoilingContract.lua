@@ -6,7 +6,7 @@
 
 ---@class SubsoilingContract : Contract
 SubsoilingContract = {}
-SubsoilingContract_mt = Class(SubsoilingContract, Contract)
+local SubsoilingContract_mt = Class(SubsoilingContract, Contract)
 
 --- SubsoilingContract class
 ---@param contractType ContractType

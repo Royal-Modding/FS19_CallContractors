@@ -6,7 +6,7 @@
 
 ---@class SowingContract : Contract
 SowingContract = {}
-SowingContract_mt = Class(SowingContract, Contract)
+local SowingContract_mt = Class(SowingContract, Contract)
 
 --- SowingContract class
 ---@param contractType ContractType

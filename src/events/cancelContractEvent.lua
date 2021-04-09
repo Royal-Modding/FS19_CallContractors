@@ -6,7 +6,7 @@
 
 ---@class CancelContractEvent : Event
 CancelContractEvent = {}
-CancelContractEvent_mt = Class(CancelContractEvent, Event)
+local CancelContractEvent_mt = Class(CancelContractEvent, Event)
 
 InitEventClass(CancelContractEvent, "CancelContractEvent")
 

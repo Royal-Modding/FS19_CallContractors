@@ -11,7 +11,7 @@ SignContractErrorEvent.ERROR_TYPES.TEST = 1
 SignContractErrorEvent.ERROR_TYPES.NOT_ON_SERVER = 2
 SignContractErrorEvent.ERROR_TYPES.PREREQUISITES_NO_LONGER_MET = 3
 SignContractErrorEvent.ERROR_TYPES.ALREADY_ACTIVE = 4
-SignContractError_mt = Class(SignContractErrorEvent, Event)
+local SignContractError_mt = Class(SignContractErrorEvent, Event)
 
 InitEventClass(SignContractErrorEvent, "SignContractErrorEvent")
 

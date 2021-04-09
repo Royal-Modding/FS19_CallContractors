@@ -6,7 +6,7 @@
 
 ---@class ContractProposalsBatch
 ContractProposalsBatch = {}
-ContractProposalsBatch_mt = Class(ContractProposalsBatch)
+local ContractProposalsBatch_mt = Class(ContractProposalsBatch)
 
 ---@param contractProposalKey string
 ---@param mt? table custom meta table

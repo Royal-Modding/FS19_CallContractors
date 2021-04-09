@@ -6,7 +6,7 @@
 
 ---@class SignContractEvent : Event
 SignContractEvent = {}
-SignContractEvent_mt = Class(SignContractEvent, Event)
+local SignContractEvent_mt = Class(SignContractEvent, Event)
 
 InitEventClass(SignContractEvent, "SignContractEvent")
 

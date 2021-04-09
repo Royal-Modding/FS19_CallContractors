@@ -6,7 +6,7 @@
 
 ---@class RequestContractsEvent : Event
 RequestContractsEvent = {}
-RequestContractsEvent_mt = Class(RequestContractsEvent, Event)
+local RequestContractsEvent_mt = Class(RequestContractsEvent, Event)
 
 InitEventClass(RequestContractsEvent, "RequestContractsEvent")
 

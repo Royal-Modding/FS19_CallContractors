@@ -6,7 +6,7 @@
 
 ---@class SellingGoodsContractType : ContractType
 SellingGoodsContractType = {}
-SellingGoodsContractType_mt = Class(SellingGoodsContractType, ContractType)
+local SellingGoodsContractType_mt = Class(SellingGoodsContractType, ContractType)
 
 --- SellingGoodsContractType base class
 ---@param id number

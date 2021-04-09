@@ -6,7 +6,7 @@
 
 ---@class Contract : Class
 Contract = {}
-Contract_mt = Class(Contract)
+local Contract_mt = Class(Contract)
 
 --- Contract base class
 ---@param type ContractType

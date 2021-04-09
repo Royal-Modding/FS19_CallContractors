@@ -14,7 +14,7 @@ RemoveContractEvent.REASONS.RUN_FAILED = 4
 RemoveContractEvent.REASONS.COMPLETED = 5
 RemoveContractEvent.REASONS.FARMLAND_SOLD = 6
 RemoveContractEvent.REASONS.FARM_DESTROYED = 7
-RemoveContractEvent_mt = Class(RemoveContractEvent, Event)
+local RemoveContractEvent_mt = Class(RemoveContractEvent, Event)
 
 InitEventClass(RemoveContractEvent, "RemoveContractEvent")
 

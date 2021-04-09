@@ -6,7 +6,7 @@
 
 ---@class SignedContract : Class
 SignedContract = {}
-SignedContract_mt = Class(SignedContract)
+local SignedContract_mt = Class(SignedContract)
 
 --- encapsulation class for signed contracts
 ---@param key? string

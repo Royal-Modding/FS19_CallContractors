@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+    <texts>
+        <text name="input_CALL_CONTRACTORS_SHOW"                    text="Управление контрактами (Вызов подрядчиков)" />
+        <text name="cc_job_type_cultivating"                        text="Культивация" />
+        <text name="cc_job_type_subsoiling"                         text="Глубокорыхление" />
+        <text name="cc_job_type_limeSpreading"                      text="Внесение извести" />
+        <text name="cc_job_type_plowing"                            text="Вспашка" />
+        <text name="cc_job_type_sowing"                             text="Посев" />
+        <text name="cc_job_type_selling_goods"                      text="Продажа" />
+        <text name="gui_cc_container_title"                         text="Вызов подрядчиков" />
+        <text name="gui_cc_field_selector_title"                    text="Поле" />
+        <text name="gui_cc_fruit_selector_title"                    text="Культура" />
+        <text name="gui_cc_job_type_selector_title"                 text="Тип работы" />
+        <text name="gui_cc_job_time_text"                           text="Выполню работу в течении %d часов" />
+        <text name="gui_cc_convening_fee_text"                      text="Предоплата:" />
+        <text name="gui_cc_job_charge_text"                         text="Плата за работу:" />
+        <text name="gui_cc_payment_amount_text"                     text="Сумма к оплате:" />
+        <text name="gui_cc_remaining_payment_text"                  text="Осталось оплатить:" />
+        <text name="gui_cc_sign"                                    text="Заключить договор" />
+        <text name="dialog_cc_cannot_be_performed"                  text="Заключение контракта отменено, предложенный контракт больше не действительный!" />
+        <text name="dialog_cc_already_active"                       text="Заключение контракта отменено, похоже, что один уже подписан!" />
+        <text name="dialog_cc_signing_confirm_title"                text="Вы уверены, что хотите заключить этот договор?" />
+        <text name="dialog_cc_signing_confirm_text"                 text="Необходимо оплатить %s сейчас и дополнительно %s, после выполнения работы." />
+        <text name="dialog_cc_cancel_confirm_title"                 text="Вы уверены, что хотите расторгнуть этот договор?" />
+        <text name="dialog_cc_cancel_confirm_text"                  text="Вам не будет возвращена предоплата." />
+        <text name="warning_cc_noFarmlands"                         text="Здесь нет ничего для тебя, купи немного земли!" />
+        <text name="warning_cc_noFarm"                              text="Здесь ничего нет, сначала присоединяйтесь к ферме!" />
+        <text name="finance_cc_contractorsPayment"                  text="Оплата подрядчикам" />
+        <text name="dialog_cc_contract_cancelled_by_contractor"     text="У подрядчика %s возникли проблемы, и поэтому не сможет выполнить подписанный договор. Он извинился и вернул вам вдвое больше, чем вы заплатили." />
+        <text name="dialog_cc_contract_prerequisites_no_longer_met" text="Возможно, что-то изменилось, с момента подписания контракта и подрядчик %s больше не может выполнить работу." />
+    </texts>
+</l10n>

@@ -58,27 +58,6 @@ function CallContractors:initialize()
     self.gui = g_gui:loadGui(self.guiDirectory .. "ccGui.xml", "CallContractorsGui", CCGui:new())
 end
 
-function CallContractors:onMissionInitialize(baseDirectory, missionCollaborators)
-end
-
-function CallContractors:onSetMissionInfo(missionInfo, missionDynamicInfo)
-end
-
-function CallContractors:onLoad()
-end
-
-function CallContractors:onPreLoadMap(mapFile)
-end
-
-function CallContractors:onCreateStartPoint(startPointNode)
-end
-
-function CallContractors:onLoadMap(mapNode, mapFile)
-end
-
-function CallContractors:onPostLoadMap(mapNode, mapFile)
-end
-
 function CallContractors:onLoadSavegame(savegameDirectory, savegameIndex)
     local savegameFilename = Utils.getFilename(self.savegameFilename, savegameDirectory)
     if fileExists(savegameFilename) then
@@ -88,54 +67,14 @@ function CallContractors:onLoadSavegame(savegameDirectory, savegameIndex)
     end
 end
 
-function CallContractors:onPreLoadVehicles(xmlFile, resetVehicles)
-end
-
-function CallContractors:onPreLoadItems(xmlFile)
-end
-
-function CallContractors:onPreLoadOnCreateLoadedObjects(xmlFile)
-end
-
-function CallContractors:onLoadFinished()
-end
-
 function CallContractors:onStartMission()
-    RequestContractsEvent.sendEvent()
-end
-
-function CallContractors:onMissionStarted()
-end
-
-function CallContractors:onWriteStream(streamId)
-end
-
-function CallContractors:onReadStream(streamId)
+    if g_server == nil then
+        RequestContractsEvent.sendEvent()
+    end
 end
 
 function CallContractors:onUpdate(dt)
     self.contractsManager:update(dt)
-end
-
-function CallContractors:onUpdateTick(dt)
-end
-
-function CallContractors:onWriteUpdateStream(streamId, connection, dirtyMask)
-end
-
-function CallContractors:onReadUpdateStream(streamId, timestamp, connection)
-end
-
-function CallContractors:onMouseEvent(posX, posY, isDown, isUp, button)
-end
-
-function CallContractors:onKeyEvent(unicode, sym, modifier, isDown)
-end
-
-function CallContractors:onDraw()
-end
-
-function CallContractors:onPreSaveSavegame(savegameDirectory, savegameIndex)
 end
 
 function CallContractors:onPostSaveSavegame(savegameDirectory, savegameIndex)
@@ -144,16 +83,6 @@ function CallContractors:onPostSaveSavegame(savegameDirectory, savegameIndex)
     self.contractsManager:onSaveSavegame(xmlFile, "callContractors")
     saveXMLFile(xmlFile)
     delete(xmlFile)
-end
-
-function CallContractors:onPreDeleteMap()
-end
-
-function CallContractors:onDeleteMap()
-end
-
-function CallContractors:onLoadHelpLine()
-    --return self.directory .. "gui/helpLine.xml"
 end
 
 function CallContractors:openGui()

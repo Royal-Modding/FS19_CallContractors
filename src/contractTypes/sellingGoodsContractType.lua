@@ -33,7 +33,13 @@ function SellingGoodsContractType.checkPrerequisites(farmId)
             numSilos = numSilos + 1
         end
     end
-    return numSilos > 0
+    local atLeastOneFruit = false
+    if numSilos > 0 then
+        for _, fruit in pairs(g_fruitTypeManager:getFruitTypes()) do
+            atLeastOneFruit = atLeastOneFruit or SellingGoodsContractType.fruitsFilter(farmId, fruit)
+        end
+    end
+    return atLeastOneFruit
 end
 
 ---@param farmId integer

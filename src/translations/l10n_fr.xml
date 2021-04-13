@@ -3,29 +3,29 @@
     <texts>
         <text name="input_CALL_CONTRACTORS_SHOW"                    text="Affiche l'interface de gestion des contrats (Call Contractors)" />
         <text name="cc_job_type_cultivating"                        text="Cultiver" />
-        <text name="cc_job_type_subsoiling"                         text="Sous-solage" />
+        <text name="cc_job_type_subsoiling"                         text="Décompacter" />
         <text name="cc_job_type_limeSpreading"                      text="Épandage de chaux" />
-        <text name="cc_job_type_plowing"                            text="Labourage" />
-        <text name="cc_job_type_sowing"                             text="Semis" />
-        <text name="cc_job_type_selling_goods"                      text="Vendre" />
-        <text name="gui_cc_container_title"                         text="Call Contractors" />
+        <text name="cc_job_type_plowing"                            text="Labourer" />
+        <text name="cc_job_type_sowing"                             text="Semer" />
+        <text name="cc_job_type_selling_goods"                      text="Vente" />
+        <text name="gui_cc_container_title"                         text="Gestion des contrats" />
         <text name="gui_cc_field_selector_title"                    text="Champ" />
         <text name="gui_cc_fruit_selector_title"                    text="Culture" />
         <text name="gui_cc_job_type_selector_title"                 text="Travail" />
         <text name="gui_cc_job_time_text"                           text="Fera le travail dans les %d heures" />
-        <text name="gui_cc_convening_fee_text"                      text="Coût d'appel:" />
-        <text name="gui_cc_job_charge_text"                         text="Prix de travail:" />
-        <text name="gui_cc_payment_amount_text"                     text="Montant du paiement:" />
-        <text name="gui_cc_remaining_payment_text"                  text="Paiement restant:" />
+        <text name="gui_cc_convening_fee_text"                      text="Tarif de la réservation :" />
+        <text name="gui_cc_job_charge_text"                         text="Tarif du travail : " />
+        <text name="gui_cc_payment_amount_text"                     text="Montant total :" />
+        <text name="gui_cc_remaining_payment_text"                  text="Montant restant :" />
         <text name="gui_cc_sign"                                    text="Accepter" />
-        <text name="dialog_cc_cannot_be_performed"                  text="Contrat annulée, la proposition de contrat n'était plus valide!" />
-        <text name="dialog_cc_already_active"                       text="Contrat annulée, il semble que quelcu'un a déjà pris le contrat!" />
-        <text name="dialog_cc_signing_confirm_title"                text="Êtes-vous sûr de vouloir accepter ce contrat?" />
-        <text name="dialog_cc_signing_confirm_text"                 text="Vous devrez payer %s et un %s supplémentaire lorsque le travail est terminé." />
+        <text name="dialog_cc_cannot_be_performed"                  text="Contrat annulé, la proposition de contrat n'était plus valide !" />
+        <text name="dialog_cc_already_active"                       text="Contrat annulé, il semble que quelqu'un d'autre a déjà accepté le contrat !" />
+        <text name="dialog_cc_signing_confirm_title"                text="Êtes-vous sûr de vouloir accepter ce contrat ?" />
+        <text name="dialog_cc_signing_confirm_text"                 text="Vous devrez payer %s et un %s supplémentaire lorsque le travail sera terminé." />
         <text name="dialog_cc_cancel_confirm_title"                 text="Êtes-vous sûr de vouloir annuler ce contrat?" />
-        <text name="dialog_cc_cancel_confirm_text"                  text="Vous ne serez pas remboursé des frais de convocation." />
-        <text name="warning_cc_noFarmlands"                         text="Il n'y a rien pour toi ici, achetez d'abord un terrain!" />
-        <text name="warning_cc_noFarm"                              text="Il n'y a rien pour toi ici, rejoignez une ferme d'abord!" />
+        <text name="dialog_cc_cancel_confirm_text"                  text="Vous ne serez pas remboursé des frais de réservation." />
+        <text name="warning_cc_noFarmlands"                         text="Il n'y a rien pour vous ici, achetez d'abord un terrain !" />
+        <text name="warning_cc_noFarm"                              text="Il n'y a rien pour vous ici, rejoignez d'abord une ferme !" />
         <text name="finance_cc_contractorsPayment"                  text="Paiement des sous-traitants" />
         <text name="dialog_cc_contract_cancelled_by_contractor"     text="Le sous-traitant %s a eu un événement inattendu et ne pourra pas terminer le travail. Il s'excuse et vous a remboursé le double du prix que vous avez payé pour l'appeler." />
         <text name="dialog_cc_contract_prerequisites_no_longer_met" text="Quelque chose a changé après la signature du contrat et le sous-traitant %s ne peut plus faire le travail." />

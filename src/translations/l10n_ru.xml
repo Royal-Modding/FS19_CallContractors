@@ -3,8 +3,8 @@
     <texts>
         <text name="input_CALL_CONTRACTORS_SHOW"                    text="Управление контрактами (Вызов подрядчиков)" />
         <text name="cc_job_type_cultivating"                        text="Культивация" />
-        <text name="cc_job_type_subsoiling"                         text="Глубокорыхление" />
-        <text name="cc_job_type_limeSpreading"                      text="Внесение извести" />
+        <text name="cc_job_type_subsoiling"                         text="Чизелевание" />
+        <text name="cc_job_type_limeSpreading"                      text="Известкован." />
         <text name="cc_job_type_plowing"                            text="Вспашка" />
         <text name="cc_job_type_sowing"                             text="Посев" />
         <text name="cc_job_type_selling_goods"                      text="Продажа" />

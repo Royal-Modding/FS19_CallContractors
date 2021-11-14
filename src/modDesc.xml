@@ -19,6 +19,16 @@ Types of jobs currently available:
  - Subsoiling
  - Lime spreading
  - Selling goods
+
+ Changelog ${version}:
+- Added brazilian translation
+- Improved existing translations
+- Updated the HUD library to latest version
+ - Fixed a bug that caused the HUD to not show up on small screens
+ - Fixed some small display issues on big screens
+ - Improved screen margins calculation
+ - Improved font sizing
+- Last version for Farming Simulator 19
 ]]>
 		</en>
 		<de>
@@ -34,6 +44,16 @@ Derzeit verfügbare Auftragsarten:
  - Unterpflügen
  - Kalk streuen
  - Verkaufen
+
+Changelog ${version}:
+- Zusätzliche brasilianische Übersetzung
+- Verbesserte bestehende Übersetzungen
+- Die HUD-Bibliothek wurde auf die neueste Version aktualisiert
+ - Ein Fehler wurde behoben, der dazu führte, dass das HUD auf kleinen Bildschirmen nicht angezeigt wurde
+ - Einige kleine Anzeigeprobleme auf großen Bildschirmen behoben
+ - Die Berechnung der Bildschirmränder wurde verbessert
+ - Verbesserte Schriftgrößenanpassung
+- Letzte Version für Landwirtschafts-Simulator 19
 ]]>
 		</de>
 		<fr>
@@ -49,23 +69,18 @@ Types de travaux actuellement disponibles :
  - Décompacter
  - Épandage de chaux
  - Vente de produits
+
+Changelog ${version}:
+- Ajout d'une traduction en brésilien
+- Amélioration des traductions existantes
+- Mise à jour de la bibliothèque HUD à la dernière version
+ - Correction d'un bug à cause duquel le HUD ne s'affichait pas sur les petits écrans
+ - Correction de quelques petits problèmes d'affichage sur les grands écrans
+ - Amélioration du calcul des marges d'écran
+ - Amélioration de la taille des polices
+- Dernière version pour Farming Simulator 19
 ]]>
 		</fr>
-		<ru>
-			<![CDATA[
-Этот мод позволяет нанимать подрядчика на работы, для выполнения которых у вас нет времени или оборудования.
-Стоимость работы варьируется в основном в зависимости от времени необходимого для выполнения этой работы. Если у вас не много денег, придётся довольствоваться выполнением контракта в течении долгого времени. Хотя если вам срочно необходимо выполнить работу, придётся потратить немного больше денег.
-Нажмите CTRL + SHIFT + C чтобы открыть панель управления подрядчиками.
-
-На данный момент доступны такие типы работ:
- - Вспашка
- - Культивация
- - Посев
- - Глубокое рыхление
- - Внесение извести
- - Продажа продукции
-]]>
-		</ru>
 	</description>
 	<multiplayer supported="true" />
 	<iconFilename>icon.png</iconFilename>
@@ -92,5 +107,4 @@ Types de travaux actuellement disponibles :
 	</inputBinding>
 
 	<l10n filenamePrefix="translations/l10n" />
-
 </modDesc>

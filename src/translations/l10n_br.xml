@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<l10n>
+    <texts>
+        <text name="input_CALL_CONTRACTORS_SHOW" text="Mostra a GUI de gerenciamento de contrato (Call Contractors)" />
+        <text name="cc_job_type_cultivating" text="Cultivar" />
+        <text name="cc_job_type_subsoiling" text="Subsolagem" />
+        <text name="cc_job_type_limeSpreading" text="Calcária " />
+        <text name="cc_job_type_plowing" text="Arar" />
+        <text name="cc_job_type_sowing" text="Semear" />
+        <text name="cc_job_type_selling_goods" text="Vender" />
+        <text name="gui_cc_container_title" text="Chamar empreiteiros" />
+        <text name="gui_cc_field_selector_title" text="Campo" />
+        <text name="gui_cc_fruit_selector_title" text="Fruto" />
+        <text name="gui_cc_job_type_selector_title" text="Trabalho" />
+        <text name="gui_cc_job_time_text" text="Vou fazer o trabalho dentro %d horas" />
+        <text name="gui_cc_convening_fee_text" text="Taxa de convocação:" />
+        <text name="gui_cc_job_charge_text" text="Taxa de trabalho:" />
+        <text name="gui_cc_payment_amount_text" text="Valor do pagamento:" />
+        <text name="gui_cc_remaining_payment_text" text="Pagamento restante:" />
+        <text name="gui_cc_sign" text="Assinar contrato" />
+        <text name="dialog_cc_cannot_be_performed" text="A assinatura do contrato foi cancelada, a proposta do contrato não era mais válida!" />
+        <text name="dialog_cc_already_active" text="Assinatura do contrato cancelada, parece que outro já foi assinado!" />
+        <text name="dialog_cc_signing_confirm_title" text="Tem certeza de que deseja aceitar este contrato?" />
+        <text name="dialog_cc_signing_confirm_text" text="Você terá que pagar %s agora e um adicional %s quando o trabalho estiver feito." />
+        <text name="dialog_cc_cancel_confirm_title" text="Tem certeza de que deseja cancelar este contrato?" />
+        <text name="dialog_cc_cancel_confirm_text" text="Você não será reembolsado da taxa de convocação." />
+        <text name="warning_cc_noFarmlands" text="Não há nada para você aqui, compre um terreno primeiro!" />
+        <text name="warning_cc_noFarm" text="Não há nada para você aqui, junte-se a uma fazenda primeiro!" />
+        <text name="finance_cc_contractorsPayment" text="Pagamento de empreiteiros" />
+        <text name="dialog_cc_contract_cancelled_by_contractor" text="O empreiteiro %s teve um problema inesperado e, portanto, não será capaz de cumprir o contrato assinado. Ele se desculpou e devolveu o dobro do valor do depósito pago." />
+        <text name="dialog_cc_contract_prerequisites_no_longer_met" text="Algo pode ter mudado desde a assinatura do contrato e o contratante %s não pode mais realizar o trabalho." />
+    </texts>
+</l10n>
